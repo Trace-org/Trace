@@ -18,7 +18,7 @@ ADMIN_PUBLIC_KEY=GD...             # opcional: clave pública
 ADMIN_SECRET_KEY=SC...             # opcional: clave secreta
 
 # ID del contrato desplegado
-CONTRACT_ID=CADY6CZACBOKGQ26ZS7JDTL23H4FNQZLN5TQYJOP2GJQP3JFSPTJ7FYQ
+CONTRACT_ID=CCVW6SNP3K2YIZCXH4SENOTROEP3IXEAOS4K3XTO4TTBLJLOAEIJM62N
 ```
 
 Cargar en shell:
@@ -48,7 +48,15 @@ cargo build --target wasm32v1-none --release
 
 Artefacto: `contracts/target/wasm32v1-none/release/marketplace.wasm`
 
-## 4) Desplegar (opcional, si creás uno nuevo)
+## 4) Optimizar WASM (recomendado)
+
+```
+stellar contract optimize --wasm ../target/wasm32v1-none/release/marketplace.wasm
+```
+
+Esto reduce el tamaño del archivo significativamente (ej: de ~46KB a ~26KB) y es **requerido para producción**.
+
+## 5) Desplegar (opcional, si creás uno nuevo)
 
 ```
 stellar contract deploy \
@@ -57,12 +65,12 @@ stellar contract deploy \
   --wasm /Users/user/oss-contributions/Trace/contracts/target/wasm32v1-none/release/marketplace.wasm
 ```
 
-## 5) Invocar funciones (CLI v23)
+## 6) Invocar funciones (CLI v23)
 Regla: después de `--` va el nombre de la función y luego flags con nombre.
 
 Lecturas: `--send=no` (simula). Escrituras: firmar con `trace-dev` o `SC...`.
 
-### 5.1 Crear proyecto
+### 6.1 Crear proyecto
 
 ```
 cat > /tmp/location.json << 'JSON'
@@ -85,7 +93,7 @@ Example output:
 "1"
 ```
 
-### 5.2 Listar / Detalle
+### 6.2 Listar / Detalle
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" --send=no -- list_projects --start_after 0 --limit 20
@@ -96,7 +104,7 @@ Example output (get_project):
 {"id":"1","owner":"GD...","name":"Comedor Escolar","deadline_ts":"1726000000","current_amount":"0","target_amount":"30000000","problem_statement":"Crear un comedor escolar","impact_area":"Educacion","location":{"latitude":"-34000000","longitude":"-58000000","country":"AR","province":"Buenos Aires","city":"La Plata"},"milestones":[],"updates":[]}
 ```
 
-### 5.3 Donación (metadatos)
+### 6.3 Donación (metadatos)
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
@@ -107,7 +115,7 @@ Example output:
 "1"   # donation sequence
 ```
 
-### 5.4 Updates
+### 6.4 Updates
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
@@ -126,7 +134,7 @@ Example output (list_updates):
 [{"title":"Avance 1","body":"Se compraron materiales","timestamp":"1736201000"}]
 ```
 
-### 5.5 Milestones
+### 6.5 Milestones
 
 ```
 # Completar índice 0 (solo si el proyecto tiene hitos)
@@ -145,7 +153,7 @@ Example output (list_milestones):
 [{"title":"H1","description":"D1","amount_budget":"1000","completed":true}]
 ```
 
-### 5.6 Stats (dashboard)
+### 6.6 Stats (dashboard)
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" --send=no -- \
@@ -156,20 +164,46 @@ Example output:
 {"current_amount":"10000000","target_amount":"30000000","percent_bp":"3333","donations_count":"1","milestones_completed":0,"milestones_total":0,"last_update_ts":"1736201000"}
 ```
 
-## 5.7 Basic events (English)
+### 6.7 Impact metrics
+
+```
+# Set impacted people (solo owner del proyecto)
+stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
+  set_impacted_people --project_id 1 --owner $(stellar keys address trace-dev) --impacted_people 123
+
+# Get impacted people for a project
+stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" --send=no -- \
+  get_impacted_people --project_id 1
+
+# Get total impacted people across all projects where donor donated
+stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" --send=no -- \
+  get_donor_impacted_people --donor $(stellar keys address trace-dev)
+```
+Example output (get_impacted_people):
+```
+"123"
+```
+Example output (get_donor_impacted_people):
+```
+"123"   # suma de impacted_people de todos los proyectos donde donó
+```
+
+## 6.8 Basic events (English)
 Emitted for indexers/dashboards:
 - PrjCreate(project_id, owner, name, deadline_ts, target_amount, impact_area)
 - Donate(project_id, seq, donor, amount, timestamp, current_amount)
 - UpdAdded(project_id, update_index, timestamp, title)
 - MsDone(project_id, milestone_index, title, ledger_timestamp)
+- ImpSet(project_id, impacted_people)
 
-## 6) Errores comunes
+## 7) Errores comunes
+- `Error(Contract, #1)` NotAuthorized: no sos el owner del proyecto.
 - `Error(Contract, #2)` ProjectNotFound: el `project_id` no existe.
-- `Error(Contract, #3)` InvalidArgument: índice de milestone inválido / datos faltantes.
+- `Error(Contract, #3)` InvalidArgument: índice de milestone inválido / datos faltantes / impacted_people negativo.
 - Escrituras con `--source` G...: no firma. Usar `trace-dev` o `SC...`.
 - JSON inline mal escapado: preferí `--<arg>-file-path`.
 
-## 7) Código
+## 8) Código
 - Workspace: `contracts/Cargo.toml`
 - Crate: `contracts/marketplace`
 - Main: `contracts/marketplace/src/lib.rs`
