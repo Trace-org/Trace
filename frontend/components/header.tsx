@@ -65,7 +65,7 @@ export function Header() {
                   <span className="absolute bottom-1 left-4 w-0 h-0.5 bg-gradient-to-r from-trace-forest to-trace-earth transition-all duration-300 group-hover:w-8"></span>
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto border-0 shadow-none">
                 <CompanyRegistration DialogCloseButton={DialogClose} />
               </DialogContent>
             </Dialog>
@@ -118,7 +118,7 @@ export function Header() {
                   <span>Para empresas</span>
                 </button>
               </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto border-0 shadow-none">
                 <CompanyRegistration DialogCloseButton={DialogClose} />
               </DialogContent>
             </Dialog>

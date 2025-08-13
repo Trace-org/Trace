@@ -11,6 +11,7 @@ interface ProjectCardProps {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const progressPercentage = (project.currentAmount / project.targetAmount) * 100
+  
 
   return (
     <Link href={`/proyecto/${project.id}`} className="block h-full">
