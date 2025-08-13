@@ -66,7 +66,7 @@ export function Header() {
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <CompanyRegistration />
+                <CompanyRegistration DialogCloseButton={DialogClose} />
               </DialogContent>
             </Dialog>
           </nav>
@@ -119,7 +119,7 @@ export function Header() {
                 </button>
               </DialogTrigger>
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                <CompanyRegistration />
+                <CompanyRegistration DialogCloseButton={DialogClose} />
               </DialogContent>
             </Dialog>
             <div className="pt-4 border-t border-trace-forest/10">

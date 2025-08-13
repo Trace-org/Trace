@@ -81,9 +81,9 @@ export function DonationCard({ project }: DonationCardProps) {
   if (currentStep === "amount") {
     return (
       <div className="space-y-6">
-        <Card className="border-trace-forest/20">
-          <CardHeader className="bg-trace-forest/5">
-            <CardTitle className="font-serif text-xl text-trace-earth flex items-center">
+        <Card className="border-trace-forest/20 bg-white">
+          <CardHeader >
+            <CardTitle className=" text-xl text-trace-earth flex items-center">
               <Heart className="w-5 h-5 mr-2 text-trace-cherry" />
               Hacer una donación
             </CardTitle>
@@ -146,9 +146,9 @@ export function DonationCard({ project }: DonationCardProps) {
         </Card>
 
         {/* Project Info Card */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
-            <CardTitle className="font-serif text-lg text-trace-earth">Información del proyecto</CardTitle>
+            <CardTitle className=" text-lg text-trace-earth">Información del proyecto</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -190,9 +190,9 @@ export function DonationCard({ project }: DonationCardProps) {
 
   if (currentStep === "payment") {
     return (
-      <Card className="border-trace-forest/20">
-        <CardHeader className="bg-trace-forest/5">
-          <CardTitle className="font-serif text-xl text-trace-earth flex items-center">
+      <Card className="border-trace-forest/20 bg-white">
+        <CardHeader >
+          <CardTitle className=" text-xl text-trace-earth flex items-center">
             <Button variant="ghost" size="sm" onClick={goBack} className="mr-2 p-1">
               <ArrowLeft className="w-4 h-4" />
             </Button>
@@ -262,9 +262,9 @@ export function DonationCard({ project }: DonationCardProps) {
     }
 
     return (
-      <Card className="border-trace-forest/20">
-        <CardHeader className="bg-trace-forest/5">
-          <CardTitle className="font-serif text-xl text-trace-earth flex items-center">
+      <Card className="border-trace-forest/20 bg-white">
+        <CardHeader >
+          <CardTitle className=" text-xl text-trace-earth flex items-center">
             <Button variant="ghost" size="sm" onClick={goBack} className="mr-2 p-1">
               <ArrowLeft className="w-4 h-4" />
             </Button>
@@ -317,11 +317,11 @@ export function DonationCard({ project }: DonationCardProps) {
 
   if (currentStep === "processing") {
     return (
-      <Card className="border-trace-forest/20">
+      <Card className="border-trace-forest/20 bg-white">
         <CardContent className="p-8 text-center space-y-6">
           <Loader2 className="w-12 h-12 animate-spin text-trace-forest mx-auto" />
           <div>
-            <h3 className="font-serif text-xl text-trace-earth mb-2">Procesando tu donación</h3>
+            <h3 className=" text-xl text-trace-earth mb-2">Procesando tu donación</h3>
             <p className="text-trace-earth/70">Por favor espera mientras confirmamos tu transacción...</p>
           </div>
         </CardContent>
@@ -331,11 +331,11 @@ export function DonationCard({ project }: DonationCardProps) {
 
   if (currentStep === "success") {
     return (
-      <Card className="border-trace-forest/20">
+      <Card className="border-trace-forest/20 bg-white">
         <CardContent className="p-8 text-center space-y-6">
           <CheckCircle className="w-16 h-16 text-trace-forest mx-auto" />
           <div>
-            <h3 className="font-serif text-2xl text-trace-earth mb-2">¡Donación exitosa!</h3>
+            <h3 className=" text-2xl text-trace-earth mb-2">¡Donación exitosa!</h3>
             <p className="text-trace-earth/70 mb-4">
               Tu contribución de ${Number(donationAmount).toLocaleString()} ha sido procesada correctamente.
             </p>

@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-trace-forest/5"></div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-serif text-xl md:text-2xl font-bold mb-4 text-trace-earth">
+          <h1 className=" text-xl md:text-2xl font-bold mb-4 text-trace-earth">
             Crowdfunding transparente con <span className="text-trace-cherry">trazabilidad total</span>
           </h1>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -63,7 +63,7 @@ export default function HomePage() {
         {/* Results Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="font-serif text-3xl font-bold text-trace-earth">Proyectos de impacto</h2>
+            <h2 className=" text-3xl font-bold text-trace-earth">Proyectos de impacto</h2>
             <p className="text-trace-earth/70 mt-2">
               {filteredProjects.length} proyecto{filteredProjects.length !== 1 ? "s" : ""}
               {searchTerm || selectedCategory || selectedLocation
@@ -83,7 +83,7 @@ export default function HomePage() {
         ) : (
           <div className="text-center py-16">
             <div className="bg-white rounded-xl shadow-sm p-12">
-              <h3 className="font-serif text-2xl font-semibold text-trace-earth mb-4">No se encontraron proyectos</h3>
+              <h3 className=" text-2xl font-semibold text-trace-earth mb-4">No se encontraron proyectos</h3>
               <p className="text-trace-earth/70 mb-6">Intenta ajustar los filtros o términos de búsqueda</p>
               <button
                 onClick={() => {
@@ -101,7 +101,7 @@ export default function HomePage() {
 
         {/* Call to Action */}
         <section className="mt-16 bg-trace-forest rounded-2xl p-8 md:p-12 text-center text-white">
-          <h2 className="font-serif text-3xl font-bold mb-4">¿Tienes un proyecto social?</h2>
+          <h2 className=" text-3xl font-bold mb-4">¿Tienes un proyecto social?</h2>
           <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
             Únete a nuestra plataforma y accede a financiamiento transparente con trazabilidad completa. Cada donación
             es verificable y cada avance visible.

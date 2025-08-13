@@ -14,7 +14,7 @@ export function DonationHistory({ donations, projects }: DonationHistoryProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-xl text-trace-earth">Historial de Donaciones</CardTitle>
+        <CardTitle className="text-xl text-trace-earth">Historial de Donaciones</CardTitle>
         <p className="text-trace-earth/70">Todas tus contribuciones verificadas y trazables</p>
       </CardHeader>
       <CardContent>

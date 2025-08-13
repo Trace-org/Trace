@@ -65,9 +65,9 @@ export function ProjectFilters({
 
         {/* Filter Toggle */}
         <Button
-          variant="outline"
+          variant="outline" className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
           onClick={() => setShowFilters(!showFilters)}
-          className="border-trace-forest text-trace-forest hover:bg-trace-forest hover:text-white bg-trace-alabaster"
+          
         >
           <Filter className="w-4 h-4 mr-2" />
           Filtros
@@ -99,9 +99,9 @@ export function ProjectFilters({
                   variant={selectedCategory === category ? "default" : "outline"}
                   className={`cursor-pointer transition-colors ${
                     selectedCategory === category
-                      ? "bg-trace-forest text-white border-trace-forest"
+                      ? "badge-selected"
                       : // Fixed badge visibility with alabaster background
-                        "border-trace-forest text-trace-forest hover:bg-trace-forest hover:text-white bg-trace-alabaster"
+                        "bg-white text-trace-forest border-trace-forest hover:bg-gray-100"
                   }`}
                   onClick={() => onCategoryFilter(selectedCategory === category ? null : category)}
                 >
@@ -121,9 +121,9 @@ export function ProjectFilters({
                   variant={selectedLocation === province ? "default" : "outline"}
                   className={`cursor-pointer transition-colors ${
                     selectedLocation === province
-                      ? "bg-trace-forest text-white border-trace-forest"
+                      ? "badge-selected"
                       : // Fixed province badge visibility
-                        "border-trace-forest text-trace-forest hover:bg-trace-forest hover:text-white bg-trace-alabaster"
+                        "bg-white text-trace-forest border-trace-forest hover:bg-gray-100"
                   }`}
                   onClick={() => onLocationFilter(selectedLocation === province ? null : province)}
                 >

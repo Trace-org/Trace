@@ -10,9 +10,9 @@ interface ProjectMilestonesProps {
 
 export function ProjectMilestones({ project }: ProjectMilestonesProps) {
   return (
-    <Card>
+    <Card className="bg-white">
       <CardHeader>
-        <CardTitle className="font-serif text-2xl text-trace-earth">Hitos del proyecto</CardTitle>
+        <CardTitle className="text-2xl text-trace-earth">Hitos del proyecto</CardTitle>
         <p className="text-trace-earth/70">El financiamiento se libera gradualmente al completar cada hito</p>
       </CardHeader>
       <CardContent>

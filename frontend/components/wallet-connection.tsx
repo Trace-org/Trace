@@ -29,15 +29,12 @@ export function WalletConnection({ onConnect, onDisconnect, isConnected, address
   if (isConnected && address) {
     return (
       <div className="flex items-center space-x-3">
-        <Badge variant="secondary" className="bg-trace-forest/10 text-trace-forest border-trace-forest/20">
-          <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-          {address.slice(0, 6)}...{address.slice(-4)}
-        </Badge>
+        
         <Link href="/perfil">
           <Button
             variant="outline"
-            size="sm"
-            className="text-trace-forest border-trace-forest hover:bg-trace-forest hover:text-white bg-trace-alabaster"
+            size="sm" className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
+           
           >
             <User className="h-4 w-4 mr-2" />
             Mi Perfil
@@ -45,9 +42,9 @@ export function WalletConnection({ onConnect, onDisconnect, isConnected, address
         </Link>
         <Button
           variant="outline"
-          size="sm"
+          size="sm" className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
           onClick={onDisconnect}
-          className="text-trace-forest border-trace-forest hover:bg-trace-forest hover:text-white bg-trace-alabaster"
+         
         >
           Desconectar
         </Button>
@@ -59,7 +56,7 @@ export function WalletConnection({ onConnect, onDisconnect, isConnected, address
     <Button
       onClick={handleConnect}
       disabled={isConnecting}
-      className="bg-gradient-to-r from-trace-forest to-trace-earth hover:from-trace-earth hover:to-trace-forest text-white font-medium px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+      className="bg-trace-wallet hover:bg-trace-wallet-dark text-white hover:text-white font-medium px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
     >
       {isConnecting ? (
         <div className="flex items-center space-x-2">

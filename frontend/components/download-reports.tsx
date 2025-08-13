@@ -60,7 +60,7 @@ export function DownloadReports() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-xl text-trace-earth">Reportes y Certificados</CardTitle>
+        <CardTitle className="text-xl text-trace-earth">Reportes y Certificados</CardTitle>
         <p className="text-trace-earth/70">Documentación lista para stakeholders</p>
       </CardHeader>
       <CardContent className="space-y-4">

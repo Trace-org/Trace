@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Clock, Building2 } from "lucide-react"
 
-export function CompanyRegistration() {
+export function CompanyRegistration({ DialogCloseButton }: { DialogCloseButton: React.ElementType }) {
   const [step, setStep] = useState<"form" | "submitted" | "approved">("form")
   const [formData, setFormData] = useState({
     companyName: "",
@@ -77,7 +77,7 @@ export function CompanyRegistration() {
   }
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-lg mx-auto bg-white">
       <CardHeader className="pb-4">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-trace-forest/10 rounded-lg flex items-center justify-center">
@@ -86,6 +86,9 @@ export function CompanyRegistration() {
           <div>
             <CardTitle className="text-trace-earth text-lg">Registro Empresarial</CardTitle>
             <CardDescription className="text-sm">Completa el formulario para solicitar acceso</CardDescription>
+          </div>
+          <div className="ml-auto"> {/* This div will push the button to the right */}
+            <DialogCloseButton />
           </div>
         </div>
       </CardHeader>
@@ -227,7 +230,7 @@ export function CompanyRegistration() {
 
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-trace-forest to-trace-earth hover:from-trace-earth hover:to-trace-forest text-white font-medium py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            className="w-full bg-trace-wallet hover:bg-trace-wallet-dark text-white font-medium py-2 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
           >
             Enviar Solicitud
           </Button>

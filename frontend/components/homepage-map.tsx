@@ -8,7 +8,7 @@ export function HomepageMap() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-2xl text-trace-earth text-center">Proyectos en toda Argentina</CardTitle>
+        <CardTitle className="text-2xl text-trace-earth text-center">Proyectos en toda Argentina</CardTitle>
         <p className="text-trace-earth/70 text-center">Descubre el impacto social en cada rincón del país</p>
       </CardHeader>
       <CardContent>

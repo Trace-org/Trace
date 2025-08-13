@@ -20,7 +20,7 @@ export default function CompanyDashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="font-serif text-3xl font-bold text-trace-earth mb-2">Dashboard Empresarial</h1>
+          <h1 className="text-3xl font-bold text-trace-earth mb-2">Dashboard Empresarial</h1>
           <p className="text-trace-earth/70">
             Monitorea tu impacto social y gestiona tus donaciones de forma transparente
           </p>

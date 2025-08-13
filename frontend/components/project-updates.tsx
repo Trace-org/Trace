@@ -10,9 +10,9 @@ interface ProjectUpdatesProps {
 
 export function ProjectUpdates({ project }: ProjectUpdatesProps) {
   return (
-    <Card>
+    <Card className="bg-white">
       <CardHeader>
-        <CardTitle className="font-serif text-2xl text-trace-earth">Actualizaciones del proyecto</CardTitle>
+        <CardTitle className="text-2xl text-trace-earth">Actualizaciones del proyecto</CardTitle>
         <p className="text-trace-earth/70">Mantente al día con el progreso y pruebas de avance</p>
       </CardHeader>
       <CardContent>

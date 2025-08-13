@@ -31,7 +31,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <div className="p-6 flex-1 flex flex-col">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="font-serif text-xl font-semibold text-trace-earth line-clamp-2 flex-1">{project.name}</h3>
+            <h3 className="text-xl font-semibold text-trace-earth line-clamp-2 flex-1">{project.name}</h3>
           </div>
 
           <div className="flex items-center text-sm text-trace-earth/70 mb-2">

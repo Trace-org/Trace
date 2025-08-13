@@ -17,7 +17,7 @@ export function TaxDeductionCard({ stats }: TaxDeductionCardProps) {
   return (
     <Card className="border-trace-wheat/30 bg-trace-wheat/5">
       <CardHeader>
-        <CardTitle className="font-serif text-xl text-trace-earth flex items-center">
+        <CardTitle className="text-xl text-trace-earth flex items-center">
           <Receipt className="w-5 h-5 mr-2 text-trace-wheat" />
           Deducción Fiscal 2025
         </CardTitle>

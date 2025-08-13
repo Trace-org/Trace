@@ -12,7 +12,7 @@ export function ProjectsMap({ projects }: ProjectsMapProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-serif text-xl text-trace-earth">Mapa de Proyectos Apoyados</CardTitle>
+        <CardTitle className="text-xl text-trace-earth">Mapa de Proyectos Apoyados</CardTitle>
         <p className="text-trace-earth/70">Visualiza el alcance geográfico de tu impacto social</p>
       </CardHeader>
       <CardContent>

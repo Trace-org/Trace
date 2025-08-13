@@ -35,7 +35,7 @@ export function ImpactMetrics({ stats }: ImpactMetricsProps) {
       {/* Impact Overview */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-xl text-trace-earth">Impacto Social</CardTitle>
+          <CardTitle className=" text-xl text-trace-earth">Impacto Social</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
@@ -70,7 +70,7 @@ export function ImpactMetrics({ stats }: ImpactMetricsProps) {
       {/* Annual Goal Progress */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-xl text-trace-earth">Meta Anual 2025</CardTitle>
+          <CardTitle className=" text-xl text-trace-earth">Meta Anual 2025</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center">
@@ -100,7 +100,7 @@ export function ImpactMetrics({ stats }: ImpactMetricsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-xl text-trace-earth">Distribución por Categoría</CardTitle>
+          <CardTitle className=" text-xl text-trace-earth">Distribución por Categoría</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[250px]">
@@ -149,7 +149,7 @@ export function ImpactMetrics({ stats }: ImpactMetricsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-xl text-trace-earth">Crecimiento del Impacto</CardTitle>
+          <CardTitle className=" text-xl text-trace-earth">Crecimiento del Impacto</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[250px]">

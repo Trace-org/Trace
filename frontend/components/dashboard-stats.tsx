@@ -72,7 +72,7 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="font-serif text-xl text-trace-earth">Tendencia de Donaciones 2025</CardTitle>
+          <CardTitle className="text-xl text-trace-earth">Tendencia de Donaciones 2025</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[300px]">

@@ -71,7 +71,7 @@ export function InteractiveMap({ projects, height = "400px" }: InteractiveMapPro
       {selectedProject && (
         <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg border border-trace-forest/20 p-4 max-w-sm z-20">
           <div className="flex items-start justify-between mb-3">
-            <h3 className="font-serif text-lg font-semibold text-trace-earth line-clamp-2">{selectedProject.name}</h3>
+            <h3 className="text-lg font-semibold text-trace-earth line-clamp-2">{selectedProject.name}</h3>
             <button
               onClick={() => setSelectedProject(null)}
               className="text-trace-earth/50 hover:text-trace-earth ml-2 text-xl leading-none"

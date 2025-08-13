@@ -10,9 +10,9 @@ interface ProjectDetailsProps {
 export function ProjectDetails({ project }: ProjectDetailsProps) {
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="font-serif text-2xl text-trace-earth">Sobre este proyecto</CardTitle>
+          <CardTitle className=" text-2xl text-trace-earth">Sobre este proyecto</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
@@ -58,9 +58,9 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle className="font-serif text-2xl text-trace-earth">Transparencia total</CardTitle>
+          <CardTitle className=" text-2xl text-trace-earth">Transparencia total</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="bg-trace-forest/5 rounded-lg p-4 border border-trace-forest/20">

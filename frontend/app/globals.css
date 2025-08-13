@@ -1,50 +1,57 @@
-@import "tailwindcss";
-
-@theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
-
-  /* Fixed Trace brand colors with actual hex values from palette */
-  --color-trace-forest: #327039;
-  --color-trace-wheat: #f0be49;
-  --color-trace-earth: #133020;
-  --color-trace-cherry: #ff6b47;
-  --color-trace-alabaster: #f8edd9;
-
-  /* Default shadcn colors */
-  --color-background: #ffffff;
-  --color-foreground: #0a0a0a;
-  --color-card: #ffffff;
-  --color-card-foreground: #0a0a0a;
-  --color-popover: #ffffff;
-  --color-popover-foreground: #0a0a0a;
-  --color-primary: #0a0a0a;
-  --color-primary-foreground: #fafafa;
-  --color-secondary: #f4f4f5;
-  --color-secondary-foreground: #0a0a0a;
-  --color-muted: #f4f4f5;
-  --color-muted-foreground: #71717a;
-  --color-accent: #f4f4f5;
-  --color-accent-foreground: #0a0a0a;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #fafafa;
-  --color-border: #e4e4e7;
-  --color-input: #e4e4e7;
-  --color-ring: #71717a;
-  --color-chart-1: #e11d48;
-  --color-chart-2: #0ea5e9;
-  --color-chart-3: #22c55e;
-  --color-chart-4: #f59e0b;
-  --color-chart-5: #8b5cf6;
-  --radius: 0.5rem;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
+  :root {
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    
+
+    /* Fixed Trace brand colors with actual hex values from palette */
+    --color-trace-forest: #327039;
+    --color-trace-wheat: #f0be49;
+    --color-trace-earth: #133020;
+    --color-trace-cherry: #ff6b47;
+    --color-trace-alabaster: #f8edd9;
+    --color-trace-wallet: #1d3134;
+
+    /* Default shadcn colors */
+    --color-background: #ffffff;
+    --color-foreground: #0a0a0a;
+    --color-card: #ffffff;
+    --color-card-foreground: #0a0a0a;
+    --color-popover: #ffffff;
+    --color-popover-foreground: #0a0a0a;
+    --color-primary: #0a0a0a;
+    --color-primary-foreground: #fafafa;
+    --color-secondary: #f4f4f5;
+    --color-secondary-foreground: #0a0a0a;
+    --color-muted: #f4f4f5;
+    --color-muted-foreground: #71717a;
+    --color-accent: #f4f4f5;
+    --color-accent-foreground: #0a0a0a;
+    --color-destructive: #ef4444;
+    --color-destructive-foreground: #fafafa;
+    --color-border: #e4e4e7;
+    --color-input: #e4e4e7;
+    --color-ring: #71717a;
+    --color-chart-1: #e11d48;
+    --color-chart-2: #0ea5e9;
+    --color-chart-3: #22c55e;
+    --color-chart-4: #f59e0b;
+    --color-chart-5: #8b5cf6;
+    --radius: 0.5rem;
+  }
+
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  html, body {
+    overscroll-behavior-y: none;
   }
 }
 
@@ -63,6 +70,14 @@
 }
 .bg-trace-alabaster {
   background-color: #f8edd9;
+}
+
+.bg-trace-wallet {
+  background-color: #1d3134;
+}
+
+.hover\:bg-trace-wallet-dark:hover {
+  background-color: #152325;
 }
 
 .text-trace-forest {
@@ -95,4 +110,15 @@
 }
 .border-trace-alabaster {
   border-color: #f8edd9;
+}
+
+.badge-selected {
+  background-color: #327039;
+  color: #ffffff;
+  border-color: #327039;
+}
+
+.badge-selected:hover {
+  background-color: #ffffff;
+  color: #327039 !important;
 }

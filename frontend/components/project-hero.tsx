@@ -26,7 +26,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
               {project.category}
             </Badge>
           </div>
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-white mb-2">{project.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{project.name}</h1>
           <div className="flex items-center text-white/90">
             <MapPin className="w-4 h-4 mr-2" />
             <span>
