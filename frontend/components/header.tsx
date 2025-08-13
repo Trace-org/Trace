@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { WalletConnection } from "./wallet-connection"
 import { CompanyRegistration } from "./company-registration"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogClose, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Building2, Menu, X } from "lucide-react"
 
 export function Header() {
