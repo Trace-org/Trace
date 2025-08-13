@@ -1,3 +1,8 @@
 .env
 contracts/.env
 
+# Rust build artifacts
+target/
+**/target/
+*.wasm
+
