@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* Fixed Trace brand colors with actual hex values from palette */
+  --color-trace-forest: #327039;
+  --color-trace-wheat: #f0be49;
+  --color-trace-earth: #133020;
+  --color-trace-cherry: #ff6b47;
+  --color-trace-alabaster: #f8edd9;
+
+  /* Default shadcn colors */
+  --color-background: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0a0a0a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0a0a0a;
+  --color-primary: #0a0a0a;
+  --color-primary-foreground: #fafafa;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #0a0a0a;
+  --color-muted: #f4f4f5;
+  --color-muted-foreground: #71717a;
+  --color-accent: #f4f4f5;
+  --color-accent-foreground: #0a0a0a;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-border: #e4e4e7;
+  --color-input: #e4e4e7;
+  --color-ring: #71717a;
+  --color-chart-1: #e11d48;
+  --color-chart-2: #0ea5e9;
+  --color-chart-3: #22c55e;
+  --color-chart-4: #f59e0b;
+  --color-chart-5: #8b5cf6;
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added custom utility classes for Trace colors */
+.bg-trace-forest {
+  background-color: #327039;
+}
+.bg-trace-wheat {
+  background-color: #f0be49;
+}
+.bg-trace-earth {
+  background-color: #133020;
+}
+.bg-trace-cherry {
+  background-color: #ff6b47;
+}
+.bg-trace-alabaster {
+  background-color: #f8edd9;
+}
+
+.text-trace-forest {
+  color: #327039;
+}
+.text-trace-wheat {
+  color: #f0be49;
+}
+.text-trace-earth {
+  color: #133020;
+}
+.text-trace-cherry {
+  color: #ff6b47;
+}
+.text-trace-alabaster {
+  color: #f8edd9;
+}
+
+.border-trace-forest {
+  border-color: #327039;
+}
+.border-trace-wheat {
+  border-color: #f0be49;
+}
+.border-trace-earth {
+  border-color: #133020;
+}
+.border-trace-cherry {
+  border-color: #ff6b47;
+}
+.border-trace-alabaster {
+  border-color: #f8edd9;
+}
