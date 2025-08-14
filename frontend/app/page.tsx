@@ -5,6 +5,7 @@ import { Header } from "@/components/header"
 import { ProjectCard } from "@/components/project-card"
 import { ProjectFilters } from "@/components/project-filters"
 import { mockProjects } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -43,7 +44,7 @@ export default function HomePage() {
             </div>
             <div className="bg-white/80 backdrop-blur-sm rounded-lg px-6 py-3 border border-trace-forest/10 shadow-sm">
               <span className="text-trace-cherry font-bold text-xl">
-                ${mockProjects.reduce((sum, p) => sum + p.currentAmount, 0).toLocaleString()}
+                {formatCurrency(mockProjects.reduce((sum, p) => sum + p.currentAmount, 0))}
               </span>
               <span className="text-trace-earth ml-2 font-medium">recaudados</span>
             </div>

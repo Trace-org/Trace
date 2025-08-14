@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Receipt } from "lucide-react"
 import type { CompanyDonation, Project } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface DonationHistoryProps {
   donations: CompanyDonation[]
@@ -43,7 +44,7 @@ export function DonationHistory({ donations, projects }: DonationHistoryProps) {
                 </div>
 
                 <div className="text-right">
-                  <div className="text-lg font-bold text-trace-forest">${donation.amount.toLocaleString()}</div>
+                  <div className="text-lg font-bold text-trace-forest">{formatCurrency(donation.amount)}</div>
                   <div className="flex items-center gap-2 mt-1">
                     {donation.taxDeductible && (
                       <Badge variant="outline" className="border-trace-forest/30 text-trace-forest text-xs">

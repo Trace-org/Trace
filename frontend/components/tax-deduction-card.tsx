@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Receipt, Download, TrendingUp } from "lucide-react"
 import type { CompanyStats } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface TaxDeductionCardProps {
   stats: CompanyStats
@@ -24,7 +25,7 @@ export function TaxDeductionCard({ stats }: TaxDeductionCardProps) {
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center">
-          <div className="text-3xl font-bold text-trace-wheat mb-2">${stats.taxDeductions.toLocaleString()}</div>
+          <div className="text-3xl font-bold text-trace-wheat mb-2">{formatCurrency(stats.taxDeductions)}</div>
           <div className="text-trace-earth/70">deducción acumulada</div>
         </div>
 
@@ -35,7 +36,7 @@ export function TaxDeductionCard({ stats }: TaxDeductionCardProps) {
           </div>
           <Progress value={deductionProgress} className="h-2" />
           <div className="text-xs text-trace-earth/60 text-center">
-            Límite anual: ${maxDeductionLimit.toLocaleString()}
+            Límite anual: {formatCurrency(maxDeductionLimit)}
           </div>
         </div>
 
@@ -45,7 +46,7 @@ export function TaxDeductionCard({ stats }: TaxDeductionCardProps) {
             <span className="font-semibold text-trace-earth">Oportunidad restante</span>
           </div>
           <p className="text-sm text-trace-earth/80 mb-3">
-            Puedes deducir ${remainingDeduction.toLocaleString()} adicionales este año fiscal.
+            Puedes deducir {formatCurrency(remainingDeduction)} adicionales este año fiscal.
           </p>
           <Button
             variant="outline"

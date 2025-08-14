@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { MapPin, Calendar, Shield } from "lucide-react"
 import type { Project } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface ProjectHeroProps {
   project: Project
@@ -39,7 +40,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
       <div className="p-6 md:p-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="text-center">
-            <div className="text-2xl font-bold text-trace-forest">${project.currentAmount.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-trace-forest">{formatCurrency(project.currentAmount)}</div>
             <div className="text-sm text-trace-earth/70">recaudado</div>
           </div>
           <div className="text-center">
@@ -59,7 +60,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
           </div>
           <Progress value={progressPercentage} className="h-3" />
           <div className="flex justify-between text-sm text-trace-earth/70">
-            <span>Meta: ${project.targetAmount.toLocaleString()}</span>
+            <span>Meta: {formatCurrency(project.targetAmount)}</span>
             <span>
               <Calendar className="w-4 h-4 inline mr-1" />
               Hasta {new Date(project.deadline).toLocaleDateString("es-AR")}

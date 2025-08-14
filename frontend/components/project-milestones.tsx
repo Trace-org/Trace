@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Circle, Clock } from "lucide-react"
 import type { Project } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface ProjectMilestonesProps {
   project: Project
@@ -66,7 +67,7 @@ export function ProjectMilestones({ project }: ProjectMilestonesProps) {
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-trace-earth/70">
-                        ${milestone.currentAmount.toLocaleString()} / ${milestone.targetAmount.toLocaleString()}
+                        {formatCurrency(milestone.currentAmount)} / {formatCurrency(milestone.targetAmount)}
                       </span>
                       <span className="font-medium text-trace-forest">{milestone.percentage}%</span>
                     </div>

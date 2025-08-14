@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { MapPin, Calendar, Users } from "lucide-react"
 import type { Project } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface ProjectCardProps {
   project: Project
@@ -55,7 +56,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-trace-earth/70">Recaudado</span>
                 <span className="font-semibold text-trace-forest">
-                  ${project.currentAmount.toLocaleString()} / ${project.targetAmount.toLocaleString()}
+                  {formatCurrency(project.currentAmount)} / {formatCurrency(project.targetAmount)}
                 </span>
               </div>
               <Progress value={progressPercentage} className="h-2" />

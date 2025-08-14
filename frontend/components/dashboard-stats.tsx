@@ -3,6 +3,7 @@ import { TrendingUp, Heart, Building2, Receipt } from "lucide-react"
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { ChartTooltip } from "@/components/ui/chart"
 import type { CompanyStats } from "@/lib/mock-data"
+import { formatCurrency, formatNumber } from "@/lib/utils"
 
 interface DashboardStatsProps {
   stats: CompanyStats
@@ -12,7 +13,7 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
   const statsData = [
     {
       title: "Total Donado",
-      value: `$${stats.totalDonated.toLocaleString()}`,
+      value: formatCurrency(stats.totalDonated),
       icon: Heart,
       color: "text-trace-forest",
       bgColor: "bg-trace-forest/10",
@@ -26,14 +27,14 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
     },
     {
       title: "Personas Beneficiadas",
-      value: stats.impactMetrics.peopleHelped.toLocaleString(),
+      value: formatNumber(stats.impactMetrics.peopleHelped),
       icon: TrendingUp,
       color: "text-trace-cherry",
       bgColor: "bg-trace-cherry/10",
     },
     {
       title: "Deducción Fiscal",
-      value: `$${stats.taxDeductions.toLocaleString()}`,
+      value: formatCurrency(stats.taxDeductions),
       icon: Receipt,
       color: "text-trace-earth",
       bgColor: "bg-trace-earth/10",
@@ -91,7 +92,7 @@ export function DashboardStats({ stats }: DashboardStatsProps) {
                       return (
                         <div className="bg-white p-3 border border-trace-forest/20 rounded-lg shadow-lg">
                           <p className="text-trace-earth font-medium">{label}</p>
-                          <p className="text-trace-forest">Donaciones: ${payload[0].value?.toLocaleString()}</p>
+                          <p className="text-trace-forest">Donaciones: {formatCurrency(payload[0].value || 0)}</p>
                         </div>
                       )
                     }

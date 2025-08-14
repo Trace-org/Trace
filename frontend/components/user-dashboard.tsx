@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Heart, MapPin, Calendar, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { formatCurrency } from "@/lib/utils"
 
 interface UserStats {
   totalDonated: number
@@ -69,7 +70,7 @@ export function UserDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card className="border-trace-forest/20">
           <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-trace-forest">${stats.totalDonated.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-trace-forest">{formatCurrency(stats.totalDonated)}</div>
             <div className="text-sm text-trace-earth/70">Total Donado</div>
           </CardContent>
         </Card>
@@ -111,7 +112,7 @@ export function UserDashboard() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold text-trace-forest">${donation.amount.toLocaleString()}</div>
+                    <div className="font-semibold text-trace-forest">{formatCurrency(donation.amount)}</div>
                     <Badge variant="outline" className="text-xs border-trace-cherry/30 text-trace-cherry">
                       {donation.category}
                     </Badge>

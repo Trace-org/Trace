@@ -18,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react"
 import type { Project } from "@/lib/mock-data"
+import { formatCurrency } from "@/lib/utils"
 
 interface DonationCardProps {
   project: Project
@@ -93,18 +94,17 @@ export function DonationCard({ project }: DonationCardProps) {
               <label className="text-sm font-medium text-trace-earth mb-3 block">Montos sugeridos</label>
               <div className="grid grid-cols-2 gap-2">
                 {suggestedAmounts.map((amount) => (
-                  <Button
+                  <button
                     key={amount}
-                    variant={selectedAmount === amount ? "default" : "outline"}
-                    className={
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       selectedAmount === amount
                         ? "bg-trace-forest text-white"
-                        : "border-trace-forest/30 text-trace-forest hover:bg-trace-forest hover:text-white"
-                    }
+                        : "border border-trace-forest/30 text-trace-forest bg-white hover:bg-trace-forest hover:text-white hover:border-trace-forest"
+                    }`}
                     onClick={() => handleAmountSelect(amount)}
                   >
-                    ${amount.toLocaleString()}
-                  </Button>
+                    {formatCurrency(amount)}
+                  </button>
                 ))}
               </div>
             </div>
@@ -129,7 +129,7 @@ export function DonationCard({ project }: DonationCardProps) {
               onClick={proceedToPayment}
             >
               <Heart className="w-4 h-4 mr-2" />
-              Continuar con ${Number(donationAmount).toLocaleString() || "0"}
+              Continuar con {formatCurrency(Number(donationAmount) || 0)}
             </Button>
 
             <div className="space-y-2 pt-4 border-t border-gray-100">
@@ -202,7 +202,7 @@ export function DonationCard({ project }: DonationCardProps) {
         <CardContent className="p-6 space-y-4">
           <div className="bg-trace-alabaster/50 p-4 rounded-lg">
             <div className="text-sm text-trace-earth/70">Monto a donar</div>
-            <div className="text-2xl font-bold text-trace-earth">${Number(donationAmount).toLocaleString()}</div>
+            <div className="text-2xl font-bold text-trace-earth">{formatCurrency(Number(donationAmount) || 0)}</div>
           </div>
 
           <div className="space-y-3">
@@ -279,7 +279,7 @@ export function DonationCard({ project }: DonationCardProps) {
             </div>
             <div className="flex justify-between">
               <span className="text-trace-earth/70">Monto</span>
-              <span className="font-bold text-trace-earth">${Number(donationAmount).toLocaleString()}</span>
+              <span className="font-bold text-trace-earth">{formatCurrency(Number(donationAmount) || 0)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-trace-earth/70">Método de pago</span>
@@ -291,7 +291,7 @@ export function DonationCard({ project }: DonationCardProps) {
             </div>
             <div className="border-t pt-3 flex justify-between">
               <span className="font-bold text-trace-earth">Total</span>
-              <span className="font-bold text-trace-earth">${Number(donationAmount).toLocaleString()}</span>
+              <span className="font-bold text-trace-earth">{formatCurrency(Number(donationAmount) || 0)}</span>
             </div>
           </div>
 
@@ -308,7 +308,7 @@ export function DonationCard({ project }: DonationCardProps) {
 
           <Button className="w-full bg-trace-forest hover:bg-trace-earth text-white py-3" onClick={confirmDonation}>
             <Heart className="w-4 h-4 mr-2" />
-            Confirmar donación de ${Number(donationAmount).toLocaleString()}
+            Confirmar donación de {formatCurrency(Number(donationAmount) || 0)}
           </Button>
         </CardContent>
       </Card>
@@ -337,7 +337,7 @@ export function DonationCard({ project }: DonationCardProps) {
           <div>
             <h3 className=" text-2xl text-trace-earth mb-2">¡Donación exitosa!</h3>
             <p className="text-trace-earth/70 mb-4">
-              Tu contribución de ${Number(donationAmount).toLocaleString()} ha sido procesada correctamente.
+              Tu contribución de {formatCurrency(Number(donationAmount) || 0)} ha sido procesada correctamente.
             </p>
 
             <div className="bg-trace-alabaster/50 p-4 rounded-lg space-y-2">
