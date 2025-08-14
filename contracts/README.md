@@ -18,7 +18,7 @@ ADMIN_PUBLIC_KEY=GD...             # opcional: clave pública
 ADMIN_SECRET_KEY=SC...             # opcional: clave secreta
 
 # ID del contrato desplegado
-CONTRACT_ID=CCVW6SNP3K2YIZCXH4SENOTROEP3IXEAOS4K3XTO4TTBLJLOAEIJM62N
+CONTRACT_ID=CCG7MR5XZFYIOFVLPMQKTJULMQQNENKDUNHTMPUKPTDXWH2SRAGPN2MO
 ```
 
 Cargar en shell:
@@ -31,6 +31,14 @@ set -a; source .env; set +a
 Notas:
 - La CLI entiende `STELLAR_NETWORK`, `STELLAR_ACCOUNT`, `STELLAR_CONTRACT_ID`.
 - Podés usar `--id "$CONTRACT_ID"` explícito si preferís.
+
+### Tipos y límites (MVP)
+- IDs y contadores: `u64`
+- Timestamps: `i64` (segundos Unix)
+- Montos: `i128` (mantiene precisión)
+- Geolocalización: `latitude/longitude: i32` en microgrados (ej: −34° → −34000000)
+- Límites de strings: `name ≤ 100`, `impact_area ≤ 50`, `problem_statement ≤ 500`, `update.title ≤ 100`, `update.body ≤ 1000`
+- Estructuras: `milestones` y `updates` se almacenan como `Map<u32, …>`; los listados (`list_milestones`, `list_updates`) devuelven `Vec<…>`.
 
 ## 2) Identidad en testnet (si no la tenés)
 
@@ -74,7 +82,7 @@ Lecturas: `--send=no` (simula). Escrituras: firmar con `trace-dev` o `SC...`.
 
 ```
 cat > /tmp/location.json << 'JSON'
-{ "latitude": "-34000000", "longitude": "-58000000", "country": "AR", "province": "Buenos Aires", "city": "La Plata" }
+{ "latitude": -34000000, "longitude": -58000000, "country": "AR", "province": "Buenos Aires", "city": "La Plata" }
 JSON
 
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
@@ -101,7 +109,7 @@ stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_A
 ```
 Example output (get_project):
 ```
-{"id":"1","owner":"GD...","name":"Comedor Escolar","deadline_ts":"1726000000","current_amount":"0","target_amount":"30000000","problem_statement":"Crear un comedor escolar","impact_area":"Educacion","location":{"latitude":"-34000000","longitude":"-58000000","country":"AR","province":"Buenos Aires","city":"La Plata"},"milestones":[],"updates":[]}
+{"id":1,"owner":"GD...","name":"Comedor Escolar","deadline_ts":1726000000,"current_amount":"0","target_amount":"30000000","problem_statement":"Crear un comedor escolar","impact_area":"Educacion","location":{"latitude":-34000000,"longitude":-58000000,"country":"AR","province":"Buenos Aires","city":"La Plata"},"milestones":{},"updates":{}}
 ```
 
 ### 6.3 Donación (metadatos)
@@ -131,7 +139,7 @@ Example output (add_update):
 ```
 Example output (list_updates):
 ```
-[{"title":"Avance 1","body":"Se compraron materiales","timestamp":"1736201000"}]
+[{"title":"Avance 1","body":"Se compraron materiales","timestamp":1736201000}]
 ```
 
 ### 6.5 Milestones
@@ -190,10 +198,10 @@ Example output (get_donor_impacted_people):
 
 ## 6.8 Basic events (English)
 Emitted for indexers/dashboards:
-- PrjCreate(project_id, owner, name, deadline_ts, target_amount, impact_area)
-- Donate(project_id, seq, donor, amount, timestamp, current_amount)
+- PrjCreate(project_id:u64, owner, name, deadline_ts:i64, target_amount:i128, impact_area)
+- Donate(project_id:u64, seq:u64, donor, amount:i128, timestamp:i64, current_amount:i128)
 - UpdAdded(project_id, update_index, timestamp, title)
-- MsDone(project_id, milestone_index, title, ledger_timestamp)
+- MsDone(project_id:u64, milestone_index:u32, title, ledger_timestamp:u64)
 - ImpSet(project_id, impacted_people)
 
 ## 7) Errores comunes
