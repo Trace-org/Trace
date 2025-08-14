@@ -62,14 +62,10 @@ Once the frontend is running, you can:
 
 ## 📸 Screenshots / Demo Video
 
-Place your screenshots in the `frontend/public/` directory and link them here using Markdown image syntax:
-
-```markdown
 ![Project List](/screenshots/screenshot1.png)
 ![Project Details](/screenshots/screenshot2.jpg)
 (/screenshots/screenshot3.jpg)
 (/screenshots/screenshot4.jpg)
-
 ```
 
 ## 🔮 Future Enhancements
