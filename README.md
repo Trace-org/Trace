@@ -64,8 +64,8 @@ Once the frontend is running, you can:
 
 ![Project List](/frontend/public/screenshots/screenshot1.png)
 ![Project Details](/frontend/public/screenshots/screenshot2.jpg)
-(/frontend/public/screenshots/screenshot3.jpg)
-(/frontend/public/screenshots/screenshot4.jpg)
+![Project Details Part 2](/frontend/public/screenshots/screenshot3.jpg)
+![Project Details Part 3](/frontend/public/screenshots/screenshot4.jpg)
 ```
 
 ## 🔮 Future Enhancements
