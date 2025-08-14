@@ -18,6 +18,9 @@ import {
   Loader2,
 } from "lucide-react"
 import type { Project } from "@/lib/mock-data"
+import { stellarService } from "@/service/stellar.service"
+import { walletService } from "@/lib/wallet.service"
+import type { IMarketplaceContract } from "@/interfaces/marketplace-contract.interface"
 
 interface DonationCardProps {
   project: Project
@@ -34,6 +37,40 @@ export function DonationCard({ project }: DonationCardProps) {
   const [currentStep, setCurrentStep] = useState<DonationStep>("amount")
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null)
   const [transactionId, setTransactionId] = useState<string>("")
+
+  const donateToProject = async () => {
+    if (!donationAmount || Number(donationAmount) <= 0) return
+
+    setCurrentStep("processing")
+
+    try {
+      const donorAddress = localStorage.getItem("userAddress");
+      if (!donorAddress) {
+        setCurrentStep("confirmation");
+        throw new Error("Conecta tu wallet antes de donar");
+      }
+
+      const client = await stellarService.buildClient<IMarketplaceContract>(donorAddress);
+
+      const xdr = await client.donate({
+        project_id: project.id.toString(),
+        donor: donorAddress,
+        amount: donationAmount.toString(),
+        timestamp: Date.now().toString(),
+      })
+
+      const { signedTxXdr } = await walletService.signTransaction(xdr);
+
+      const txHash = await stellarService.submitTransaction(signedTxXdr);
+
+      console.log("Donation TX Hash:", txHash);
+      setTransactionId(txHash)
+      setCurrentStep("success")
+    } catch (error: any) {
+      console.error(error)
+      setCurrentStep("confirmation")
+    }
+  }
 
   const handleAmountSelect = (amount: number) => {
     setSelectedAmount(amount)
@@ -252,10 +289,6 @@ export function DonationCard({ project }: DonationCardProps) {
       switch (paymentMethod) {
         case "wallet":
           return "Billetera Digital"
-        case "card":
-          return "Tarjeta de Crédito"
-        case "bank":
-          return "Transferencia Bancaria"
         default:
           return ""
       }
@@ -306,7 +339,7 @@ export function DonationCard({ project }: DonationCardProps) {
             </div>
           </div>
 
-          <Button className="w-full bg-trace-forest hover:bg-trace-earth text-white py-3" onClick={confirmDonation}>
+          <Button className="w-full bg-trace-forest hover:bg-trace-earth text-white py-3" onClick={donateToProject}>
             <Heart className="w-4 h-4 mr-2" />
             Confirmar donación de ${Number(donationAmount).toLocaleString()}
           </Button>

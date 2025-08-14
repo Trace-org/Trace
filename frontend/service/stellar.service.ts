@@ -15,14 +15,12 @@ export class StellarService {
 
   constructor() {
     const serverUrl = "https://horizon-testnet.stellar.org";
-
-    this.server = new Horizon.Server(serverUrl);
-    this.serverUrl = serverUrl;
     this.rpcUrl = "https://soroban-testnet.stellar.org";
-
+    this.serverUrl = serverUrl;
     this.networkPassphrase = Networks.TESTNET;
-    this.contractAddress =
-      "CAGE73PZEHBIWASWHOSGSDRLCIIOEKQ5MUMMSDA4OYG4QZN4LFOZTVYZ";
+    this.contractAddress = "CCVW6SNP3K2YIZCXH4SENOTROEP3IXEAOS4K3XTO4TTBLJLOAEIJM62N";
+
+    this.server = new Horizon.Server(this.serverUrl);
   }
 
   async loadAccount(address: string) {
@@ -64,10 +62,9 @@ export class StellarService {
       );
 
       return result.hash;
-    } catch (error) {
-      console.log(error);
-
-      throw error;
+    } catch (error: any) {
+      console.error("Error submitting transaction:", error);
+      throw new Error(`Failed to submit transaction: ${error.message || error}`);
     }
   }
 
