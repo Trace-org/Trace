@@ -1,8 +1,20 @@
+![](https://img.shields.io/badge/Next.js-informational?style=flat&logo=next.js&logoColor=white&color=6aa6f8)
+![](https://img.shields.io/badge/Typescript-informational?style=flat&logo=typescript&logoColor=white&color=6aa6f8)
+![](https://img.shields.io/badge/TailwindCSS-informational?style=flat&logo=tailwind-css&logoColor=white&color=6aa6f8)
+![](https://img.shields.io/badge/shadcn/ui-informational?style=flat&color=6aa6f8)
+![](https://img.shields.io/badge/Stellar-informational?style=flat&logo=stellar&logoColor=white&color=6aa6f8)
+![](https://img.shields.io/badge/Soroban-informational?style=flat&color=6aa6f8)
+
+
 # Trace: Next-Gen Social Impact Platform, Powered by Stellar
 
 ## 💡 Inspiration
 
 Trace is inspired by platforms like Benevity, but with a crucial difference: it leverages the power of the Stellar blockchain for safer, faster, and more transparent transactions. Our goal is to make social impact initiatives accessible not only to companies but also to the common person, fostering a more direct and trustworthy connection between donors and projects.
+
+> Built for: [Give Hackathon Argentina - DoraHacks](https://dorahacks.io/hackathon/give-hackathon-argentina/)
+> 
+> Built By: [Renzo Barcos](https://www.linkedin.com/in/renzo-espinosa-barcos/) (FullStack Developer), [Renzo Banegas](https://www.linkedin.com/in/renzobanegas/) (FullStack Developer), [Micaela Descotte](https://www.linkedin.com/in/micaela-descotte-a5b325291/) (UI/UX & Product Designer), [Elisa Araya](https://www.linkedin.com/in/arayamariaelisa/) (FullStack Developer)
 
 ## ✨ Features
 
@@ -68,17 +80,9 @@ Once the frontend is running, you can:
 *   **Trustless Work Implementation for Escrow:** Integrate Trustless Work to enable secure, trustless escrow services for project funding.
 *   **Manteca API Implementation for Payments:** Implement the Manteca API to provide diverse and flexible payment options for donations.
 
-## 🧑‍💻 Team
-
-*   **Renzo Barcos:** FullStack Developer
-*   **Renzo Banegas:** FullStack Developer
-*   **Micaela Descotte:** UI/UX and Product Designer
-*   **Elisa Araya:** FullStack Developer
-
 ## 📸 Screenshots
 
 ![Project List](/frontend/public/screenshots/screenshot1.png)
 ![Project Details](/frontend/public/screenshots/screenshot2.jpg)
 ![Project Details Part 2](/frontend/public/screenshots/screenshot3.jpg)
 ![Project Details Part 3](/frontend/public/screenshots/screenshot4.jpg)
-```
