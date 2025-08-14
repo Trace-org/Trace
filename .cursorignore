@@ -1,0 +1,25 @@
+# Binarios y builds
+target/
+contracts/target/
+dist/
+build/
+.out/
+coverage/
+
+# Dependencias
+node_modules/
+
+# Archivos locales
+.DS_Store
+.env
+contracts/.env
+
+# Artefactos editor/IDE
+.vscode/
+.idea/
+
+# Generados del framework (ejemplos)
+.next/
+.turbo/
+
+.cursorignore

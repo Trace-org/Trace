@@ -34,8 +34,18 @@ sequenceDiagram
       Wallet-->>FE: Signed tx
       FE->>RPC: Submit invoke
       RPC->>Contract: invoke donate(...)
-      Contract-->>RPC: Events: ("v1","Donate")\n      RPC-->>FE: Success (seq id)
+      Contract-->>RPC: Events: ("v1","Donate")
+      RPC-->>FE: Success (seq id)
+      Note over FE,Contract: Donation also marks (donor, project) for impact aggregation
       FE-->>Donor: Show confirmation + updated progress
+    end
+
+    rect rgb(230,255,245)
+      Note over FE,RPC: Impact metrics (read-only)
+      FE->>RPC: get_impacted_people(project_id)
+      RPC-->>FE: i128 (people impacted in this project)
+      FE->>RPC: get_donor_impacted_people(donor)
+      RPC-->>FE: i128 (sum across donated projects)
     end
 
     rect rgb(235,255,235)
@@ -50,6 +60,15 @@ sequenceDiagram
       RPC-->>FE: Success
       FE-->>Owner: Update listed immediately
 
+      Owner->>FE: Set impacted people
+      FE->>FE: Build tx: set_impacted_people(project_id, owner, impacted_people)
+      FE->>Wallet: Sign
+      Wallet-->>FE: Signed tx
+      FE->>RPC: Submit invoke
+      RPC->>Contract: invoke set_impacted_people(...)
+      Contract-->>RPC: Events: ("v1","ImpSet")
+      RPC-->>FE: Success
+
       Owner->>FE: Complete milestone
       FE->>FE: Build tx: complete_milestone(project_id, owner, milestone_index)
       FE->>Wallet: Sign
@@ -63,7 +82,7 @@ sequenceDiagram
     rect rgb(255,245,235)
       Note over Owner,Contract: Initial project creation (admin flow)
       Owner->>FE: Create project (form)
-      FE->>FE: Build tx: create_project(owner, name, deadline_ts,\n        target_amount, problem, impact_area, location, milestones[])
+      FE->>FE: Build tx: create_project(owner, name, deadline_ts, target_amount, problem, impact_area, location, milestones[])
       FE->>Wallet: Sign
       Wallet-->>FE: Signed tx
       FE->>RPC: Submit invoke

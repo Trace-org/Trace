@@ -12,7 +12,7 @@ pub enum Error {
 #[contracttype]
 #[derive(Clone)]
 pub struct Milestone {
-    pub title: String,
+    pub title: String, // SACAR    
     pub description: String,
     pub amount_budget: i128,
     pub completed: bool,
@@ -91,7 +91,7 @@ fn write_project_don_seq(e: &Env, project_id: u128, v: u128) {
 fn project_key(id: u128) -> (Symbol, u128) { (symbol_short!("proj"), id) }
 fn donation_key(project_id: u128, seq: u128) -> (Symbol, u128, u128) { (symbol_short!("don"), project_id, seq) }
 fn impacted_key(project_id: u128) -> (Symbol, u128) { (symbol_short!("imp"), project_id) }
-fn donor_project_mark_key(donor: &Address, project_id: u128) -> (Symbol, Address, u128) { (symbol_short!("dnp"), donor.clone(), project_id) }
+fn donor_project_mark_key(donor: Address, project_id: u128) -> (Symbol, Address, u128) { (symbol_short!("dpm"), donor, project_id) }
 
 #[contract]
 pub struct MarketplaceContract;
@@ -164,12 +164,12 @@ impl MarketplaceContract {
         if amount <= 0 { panic_with_error!(&e, Error::InvalidArgument); }
         let mut project = Self::get_project(e.clone(), project_id);
         project.current_amount += amount;
+        let seq = read_project_don_seq(&e, project_id) + 1;
+        let d = Donation { seq, project_id, donor: donor.clone(), amount, timestamp };
         e.storage().persistent().set(&project_key(project_id), &project);
-        let mut seq = read_project_don_seq(&e, project_id) + 1;
-        let d = Donation { seq, project_id, donor, amount, timestamp };
         e.storage().persistent().set(&donation_key(project_id, seq), &d);
-        // mark that donor donated to project (for aggregation)
-        e.storage().persistent().set(&donor_project_mark_key(&d.donor, project_id), &true);
+        // Mark (donor, project) relation for impact aggregation
+        e.storage().persistent().set(&donor_project_mark_key(donor, project_id), &true);
         write_project_don_seq(&e, project_id, seq);
         // Emit event: DonationRecorded
         e.events().publish(
@@ -216,43 +216,11 @@ impl MarketplaceContract {
         );
     }
 
-    // Set impacted people for a project (stored separately to avoid breaking existing Project layout)
-    pub fn set_impacted_people(e: Env, project_id: u128, owner: Address, impacted_people: i128) {
-        owner.require_auth();
-        let p = Self::get_project(e.clone(), project_id);
-        if p.owner != owner { panic_with_error!(&e, Error::NotAuthorized); }
-        if impacted_people < 0 { panic_with_error!(&e, Error::InvalidArgument); }
-        e.storage().persistent().set(&impacted_key(project_id), &impacted_people);
-        e.events().publish(
-            (symbol_short!("v1"), symbol_short!("ImpSet")),
-            (project_id, impacted_people),
-        );
-    }
-
-    // Get impacted people for a project (defaults to 0 if not set)
-    pub fn get_impacted_people(e: Env, project_id: u128) -> i128 {
-        e.storage().persistent().get::<_, i128>(&impacted_key(project_id)).unwrap_or(0)
-    }
-
-    // Sum impacted people across projects where donor has donated at least once
-    pub fn get_donor_impacted_people(e: Env, donor: Address) -> i128 {
-        let max = read_next_project_id(&e);
-        let mut sum: i128 = 0;
-        let mut pid: u128 = 0;
-        while pid < max {
-            pid += 1;
-            if e.storage().persistent().has(&donor_project_mark_key(&donor, pid)) {
-                let imp = e.storage().persistent().get::<_, i128>(&impacted_key(pid)).unwrap_or(0);
-                sum += imp;
-            }
-        }
-        sum
-    }
-
     // Reporting getters for dashboards
     pub fn get_summary(e: Env, project_id: u128) -> (String, i128, i128, i128) {
         let p = Self::get_project(e, project_id);
-        (p.name, p.current_amount, p.target_amount, p.deadline_ts)
+        let percent_bp = if p.target_amount > 0 { (p.current_amount * 10_000) / p.target_amount } else { 0 };
+        (p.name, p.current_amount, p.target_amount, percent_bp)
     }
 
     pub fn get_location(e: Env, project_id: u128) -> Location {
@@ -295,6 +263,37 @@ impl MarketplaceContract {
         results
     }
 
+    // Impact metrics
+    pub fn set_impacted_people(e: Env, project_id: u128, owner: Address, impacted_people: i128) {
+        owner.require_auth();
+        let p = Self::get_project(e.clone(), project_id);
+        if p.owner != owner { panic_with_error!(&e, Error::NotAuthorized); }
+        if impacted_people < 0 { panic_with_error!(&e, Error::InvalidArgument); }
+        e.storage().persistent().set(&impacted_key(project_id), &impacted_people);
+        e.events().publish(
+            (symbol_short!("v1"), symbol_short!("ImpSet")),
+            (project_id, impacted_people),
+        );
+    }
+
+    pub fn get_impacted_people(e: Env, project_id: u128) -> i128 {
+        e.storage().persistent().get::<_, i128>(&impacted_key(project_id)).unwrap_or(0)
+    }
+
+    pub fn get_donor_impacted_people(e: Env, donor: Address) -> i128 {
+        let max = read_next_project_id(&e);
+        let mut sum: i128 = 0;
+        let mut pid: u128 = 0;
+        while pid < max {
+            pid += 1;
+            if e.storage().persistent().get::<_, bool>(&donor_project_mark_key(donor.clone(), pid)).is_some() {
+                let imp = e.storage().persistent().get::<_, i128>(&impacted_key(pid)).unwrap_or(0);
+                sum += imp;
+            }
+        }
+        sum
+    }
+
     // Aggregate stats for dashboards
     pub fn get_dashboard_stats(e: Env, project_id: u128) -> Stats {
         let p = Self::get_project(e.clone(), project_id);
@@ -332,7 +331,7 @@ mod test {
         let contract_id = e.register_contract(None, MarketplaceContract);
         let client = MarketplaceContractClient::new(&e, &contract_id);
         let owner = Address::generate(&e);
-        let loc = Location { latitude: 0, longitude: 0, country: "AR".into(), province: "Buenos Aires".into(), city: "La Plata".into() };
+        let loc = Location { latitude: 0, longitude: 0, country: &"AR".into(), province: &"Buenos Aires".into(), city: &    "La Plata".into() };
         let milestones = Vec::new(&e);
         let id = client.create_project(&owner, &"Comedor".into(), &1_726_000_000i128, &30_000i128, &"Crear comedor".into(), &"Educacion".into(), &loc, &milestones);
         let p = client.get_project(&id);
