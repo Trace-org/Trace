@@ -3,8 +3,9 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { User } from "lucide-react"
+import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit';
+
 
 interface WalletConnectionProps {
   onConnect: (address: string) => void
@@ -15,26 +16,28 @@ interface WalletConnectionProps {
 
 export function WalletConnection({ onConnect, onDisconnect, isConnected, address }: WalletConnectionProps) {
   const [isConnecting, setIsConnecting] = useState(false)
+  //const kit = new WalletsKit({ network: Network.TESTNET })
 
   const handleConnect = async () => {
-    setIsConnecting(true)
-    // Simulate wallet connection
-    setTimeout(() => {
-      const mockAddress = "0x742d35Cc6634C0532925a3b8D4C9db96590b5b8e"
-      onConnect(mockAddress)
+    try {
+      setIsConnecting(true)
+      const { address } = await kit.getAddress()
+      onConnect(address)
+    } catch (error) {
+      console.error("Error al conectar la wallet:", error)
+    } finally {
       setIsConnecting(false)
-    }, 1500)
+    }
   }
 
   if (isConnected && address) {
     return (
       <div className="flex items-center space-x-3">
-        
         <Link href="/perfil">
           <Button
             variant="outline"
-            size="sm" className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
-           
+            size="sm"
+            className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
           >
             <User className="h-4 w-4 mr-2" />
             Mi Perfil
@@ -42,9 +45,9 @@ export function WalletConnection({ onConnect, onDisconnect, isConnected, address
         </Link>
         <Button
           variant="outline"
-          size="sm" className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
+          size="sm"
+          className="bg-white text-trace-forest border-trace-forest hover:bg-gray-100 hover:text-trace-forest"
           onClick={onDisconnect}
-         
         >
           Desconectar
         </Button>
@@ -56,7 +59,7 @@ export function WalletConnection({ onConnect, onDisconnect, isConnected, address
     <Button
       onClick={handleConnect}
       disabled={isConnecting}
-      className="bg-trace-wallet hover:bg-trace-wallet-dark text-white hover:text-white font-medium px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+      className="bg-trace-wallet hover:bg-trace-wallet-dark text-white font-medium px-6 py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
     >
       {isConnecting ? (
         <div className="flex items-center space-x-2">
