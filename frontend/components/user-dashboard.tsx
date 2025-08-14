@@ -102,7 +102,7 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             {stats.donationHistory.slice(0, 3).map((donation) => (
-              <Link key={donation.id} href={`/proyecto/${donation.projectId}`}>
+              <Link key={donation.id} href={`/project/${donation.projectId}`}>
                 <div className="flex items-center justify-between p-3 bg-trace-alabaster/50 rounded-lg">
                   <div className="space-y-1">
                     <div className="font-medium text-trace-earth text-sm">{donation.projectName}</div>

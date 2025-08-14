@@ -15,7 +15,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
   
 
   return (
-    <Link href={`/proyecto/${project.id}`} className="block h-full">
+    <Link href={`/project/${project.id}`} className="block h-full">
       <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-100 hover:border-trace-forest/20 h-full flex flex-col">
         <div className="relative h-48 overflow-hidden flex-shrink-0">
           <Image

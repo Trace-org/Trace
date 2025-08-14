@@ -78,7 +78,7 @@ export function LeafletArgentinaMap({ projects, height = "320px" }: LeafletArgen
                 <span style="color:#6b7280">de ${formatCurrency(p.targetAmount)}</span>
               </div>
               <div style="display:flex;justify-content:flex-end">
-                <a href="/proyecto/${p.id}" style="color:#327039;text-decoration:none;font-weight:600;font-size:12px">Ver proyecto →</a>
+                <a href="/project/${p.id}" style="color:#327039;text-decoration:none;font-weight:600;font-size:12px">Ver proyecto →</a>
               </div>
             </div>`
           marker.bindPopup(content, { closeButton: true }).openPopup()
