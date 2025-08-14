@@ -76,8 +76,53 @@
   background-color: #1d3134;
 }
 
+/* Hover classes for Trace colors */
 .hover\:bg-trace-wallet-dark:hover {
   background-color: #152325;
+}
+
+.hover\:bg-trace-forest:hover {
+  background-color: #327039;
+}
+
+.hover\:bg-trace-earth:hover {
+  background-color: #133020;
+}
+
+.hover\:bg-trace-wheat:hover {
+  background-color: #f0be49;
+}
+
+.hover\:bg-trace-wheat\/80:hover {
+  background-color: rgba(240, 190, 73, 0.8);
+}
+
+.hover\:bg-trace-forest\/5:hover {
+  background-color: rgba(50, 112, 57, 0.05);
+}
+
+.hover\:bg-trace-forest\/10:hover {
+  background-color: rgba(50, 112, 57, 0.1);
+}
+
+.hover\:text-white:hover {
+  color: #ffffff;
+}
+
+.hover\:text-trace-forest:hover {
+  color: #327039;
+}
+
+.hover\:text-trace-earth:hover {
+  color: #133020;
+}
+
+.hover\:border-trace-forest:hover {
+  border-color: #327039;
+}
+
+.hover\:border-trace-forest\/20:hover {
+  border-color: rgba(50, 112, 57, 0.2);
 }
 
 .text-trace-forest {
