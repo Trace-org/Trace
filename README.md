@@ -53,6 +53,8 @@ Trace offers a comprehensive suite of features designed to enhance transparency 
     stellar contract optimize --wasm ../target/wasm32v1-none/release/marketplace.wasm
     ```
 
+## For specifics you can go to the readme under each section
+
 ## 📖 Usage
 
 Once the frontend is running, you can:
