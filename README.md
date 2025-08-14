@@ -60,14 +60,6 @@ Once the frontend is running, you can:
 *   Click on a project to view its details, including milestones and updates.
 *   If you are a company, explore the dedicated dashboard to manage your donations and view impact reports.
 
-## 📸 Screenshots
-
-![Project List](/frontend/public/screenshots/screenshot1.png)
-![Project Details](/frontend/public/screenshots/screenshot2.jpg)
-![Project Details Part 2](/frontend/public/screenshots/screenshot3.jpg)
-![Project Details Part 3](/frontend/public/screenshots/screenshot4.jpg)
-```
-
 ## 🔮 Future Enhancements
 
 *   **Soroban Smart Contracts Optimization:** Further optimize our Soroban smart contracts for efficiency and cost-effectiveness.
@@ -80,3 +72,11 @@ Once the frontend is running, you can:
 *   **Renzo Banegas:** FullStack Developer
 *   **Micaela Descotte:** UI/UX and Product Designer
 *   **Elisa Araya:** FullStack Developer
+
+## 📸 Screenshots
+
+![Project List](/frontend/public/screenshots/screenshot1.png)
+![Project Details](/frontend/public/screenshots/screenshot2.jpg)
+![Project Details Part 2](/frontend/public/screenshots/screenshot3.jpg)
+![Project Details Part 3](/frontend/public/screenshots/screenshot4.jpg)
+```
