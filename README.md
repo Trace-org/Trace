@@ -62,10 +62,10 @@ Once the frontend is running, you can:
 
 ## 📸 Screenshots / Demo Video
 
-![Project List](/screenshots/screenshot1.png)
-![Project Details](/screenshots/screenshot2.jpg)
-(/screenshots/screenshot3.jpg)
-(/screenshots/screenshot4.jpg)
+![Project List](/frontend/public/screenshots/screenshot1.png)
+![Project Details](/frontend/public/screenshots/screenshot2.jpg)
+(/frontend/public/screenshots/screenshot3.jpg)
+(/frontend/public/screenshots/screenshot4.jpg)
 ```
 
 ## 🔮 Future Enhancements
