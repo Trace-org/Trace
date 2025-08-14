@@ -86,3 +86,13 @@ Once the frontend is running, you can:
 ![Project Details](/frontend/public/screenshots/screenshot2.jpg)
 ![Project Details Part 2](/frontend/public/screenshots/screenshot3.jpg)
 ![Project Details Part 3](/frontend/public/screenshots/screenshot4.jpg)
+
+## ⚠ Known Issue:
+
+During testing, we encountered the following wallet error:
+
+```bash
+The wallet encountered an internal error. Please try again or contact the wallet if the problem persists.
+```
+
+This may be related to the current Stellar wallet integration (e.g., Freighter) and can occur even with correct contract parameters. We recommend retrying the transaction or refreshing the wallet session during testing.
