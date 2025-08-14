@@ -1,5 +1,5 @@
 #![no_std]
-use soroban_sdk::{contract, contracterror, contractimpl, contracttype, panic_with_error, symbol_short, Address, Env, String, Symbol, Vec};
+use soroban_sdk::{contract, contracterror, contractimpl, contracttype, panic_with_error, symbol_short, Address, Env, String, Vec, Map};
 
 #[contracterror]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -7,30 +7,33 @@ pub enum Error {
     NotAuthorized = 1,
     ProjectNotFound = 2,
     InvalidArgument = 3,
+    StringTooLong = 4,
 }
 
+// MVP: We keep human-readable fields but enforce strict length limits to control cost.
 #[contracttype]
 #[derive(Clone)]
 pub struct Milestone {
-    pub title: String, // SACAR    
+    pub title: String,
     pub description: String,
     pub amount_budget: i128,
     pub completed: bool,
 }
 
+// MVP: Keep title/body on-chain for usability, with strict limits to avoid bloat.
 #[contracttype]
 #[derive(Clone)]
 pub struct Update {
     pub title: String,
     pub body: String,
-    pub timestamp: i128,
+    pub timestamp: i64,
 }
 
 #[contracttype]
 #[derive(Clone)]
 pub struct Location {
-    pub latitude: i128,
-    pub longitude: i128,
+    pub latitude: i32,
+    pub longitude: i32,
     pub country: String,
     pub province: String,
     pub city: String,
@@ -39,27 +42,27 @@ pub struct Location {
 #[contracttype]
 #[derive(Clone)]
 pub struct Project {
-    pub id: u128,
+    pub id: u64,
     pub owner: Address,
     pub name: String,
-    pub deadline_ts: i128,
+    pub deadline_ts: i64,
     pub current_amount: i128,
     pub target_amount: i128,
     pub problem_statement: String,
     pub impact_area: String,
     pub location: Location,
-    pub milestones: Vec<Milestone>,
-    pub updates: Vec<Update>,
+    pub milestones: Map<u32, Milestone>,
+    pub updates: Map<u32, Update>,
 }
 
 #[contracttype]
 #[derive(Clone)]
 pub struct Donation {
-    pub seq: u128,
-    pub project_id: u128,
+    pub seq: u64,
+    pub project_id: u64,
     pub donor: Address,
     pub amount: i128,
-    pub timestamp: i128,
+    pub timestamp: i64,
 }
 
 #[contracttype]
@@ -68,52 +71,78 @@ pub struct Stats {
     pub current_amount: i128,
     pub target_amount: i128,
     pub percent_bp: i128,
-    pub donations_count: u128,
+    pub donations_count: u64,
     pub milestones_completed: u32,
     pub milestones_total: u32,
-    pub last_update_ts: i128,
+    pub last_update_ts: i64,
 }
 
-fn read_next_project_id(e: &Env) -> u128 {
-    e.storage().persistent().get::<_, u128>(&symbol_short!("next_proj")).unwrap_or(0)
-}
-fn write_next_project_id(e: &Env, v: u128) {
-    e.storage().persistent().set(&symbol_short!("next_proj"), &v);
-}
-
-fn read_project_don_seq(e: &Env, project_id: u128) -> u128 {
-    e.storage().persistent().get::<_, u128>(&(symbol_short!("don_seq"), project_id)).unwrap_or(0)
-}
-fn write_project_don_seq(e: &Env, project_id: u128, v: u128) {
-    e.storage().persistent().set(&(symbol_short!("don_seq"), project_id), &v);
+// Typed storage keys to avoid ad-hoc tuples and enable clearer, future-proof layout
+#[contracttype]
+#[derive(Clone)]
+enum DataKey {
+    NextProj,
+    Proj(u64),
+    DonSeq(u64),
+    Don(u64, u64),
+    Imp(u64),
+    Dpm(Address, u64),
 }
 
-fn project_key(id: u128) -> (Symbol, u128) { (symbol_short!("proj"), id) }
-fn donation_key(project_id: u128, seq: u128) -> (Symbol, u128, u128) { (symbol_short!("don"), project_id, seq) }
-fn impacted_key(project_id: u128) -> (Symbol, u128) { (symbol_short!("imp"), project_id) }
-fn donor_project_mark_key(donor: Address, project_id: u128) -> (Symbol, Address, u128) { (symbol_short!("dpm"), donor, project_id) }
+fn read_next_project_id(e: &Env) -> u64 {
+    e.storage().persistent().get::<_, u64>(&DataKey::NextProj).unwrap_or(0)
+}
+fn write_next_project_id(e: &Env, v: u64) {
+    e.storage().persistent().set(&DataKey::NextProj, &v);
+}
+
+fn read_project_don_seq(e: &Env, project_id: u64) -> u64 {
+    e.storage().persistent().get::<_, u64>(&DataKey::DonSeq(project_id)).unwrap_or(0)
+}
+fn write_project_don_seq(e: &Env, project_id: u64, v: u64) {
+    e.storage().persistent().set(&DataKey::DonSeq(project_id), &v);
+}
+
+// Replaced ad-hoc tuple keys with DataKey enum
+fn project_key(id: u64) -> DataKey { DataKey::Proj(id) }
+fn donation_key(project_id: u64, seq: u64) -> DataKey { DataKey::Don(project_id, seq) }
+fn impacted_key(project_id: u64) -> DataKey { DataKey::Imp(project_id) }
+fn donor_project_mark_key(donor: Address, project_id: u64) -> DataKey { DataKey::Dpm(donor, project_id) }
 
 #[contract]
 pub struct MarketplaceContract;
 
 #[contractimpl]
 impl MarketplaceContract {
-    // Admin creates a project
+    // MVP: Admin creates a project
+    // TODO: Move to backend for production - this is for rapid MVP iteration
     pub fn create_project(
         e: Env,
         owner: Address,
         name: String,
-        deadline_ts: i128,
+        deadline_ts: i64,
         target_amount: i128,
         problem_statement: String,
         impact_area: String,
         location: Location,
         milestones: Vec<Milestone>,
-    ) -> u128 {
+    ) -> u64 {
         owner.require_auth();
+        
+        // MVP: String length limits for gas optimization
+        // TODO: Move validation to backend, use proper content validation
         if target_amount <= 0 || name.len() == 0 { panic_with_error!(&e, Error::InvalidArgument); }
+        if name.len() > 100 { panic_with_error!(&e, Error::StringTooLong); }
+        if problem_statement.len() > 500 { panic_with_error!(&e, Error::StringTooLong); }
+        if impact_area.len() > 50 { panic_with_error!(&e, Error::StringTooLong); }
         let mut id = read_next_project_id(&e);
         id += 1;
+        // Convert incoming Vec<Milestone> into Map<u32, Milestone> to enable keyed access
+        let mut ms_map: Map<u32, Milestone> = Map::from_array(&e, []);
+        for i in 0..milestones.len() {
+            ms_map.set(i, milestones.get(i).unwrap());
+        }
+
         let project = Project {
             id,
             owner: owner.clone(),
@@ -124,8 +153,8 @@ impl MarketplaceContract {
             problem_statement,
             impact_area: impact_area.clone(),
             location,
-            milestones,
-            updates: Vec::new(&e),
+            milestones: ms_map,
+            updates: Map::from_array(&e, []),
         };
         e.storage().persistent().set(&project_key(id), &project);
         write_next_project_id(&e, id);
@@ -138,12 +167,12 @@ impl MarketplaceContract {
     }
 
     // Get a project by id
-    pub fn get_project(e: Env, id: u128) -> Project {
+    pub fn get_project(e: Env, id: u64) -> Project {
         e.storage().persistent().get::<_, Project>(&project_key(id)).unwrap_or_else(|| panic_with_error!(&e, Error::ProjectNotFound))
     }
 
     // List projects with simple pagination
-    pub fn list_projects(e: Env, start_after: u128, limit: u32) -> Vec<Project> {
+    pub fn list_projects(e: Env, start_after: u64, limit: u32) -> Vec<Project> {
         let mut results = Vec::new(&e);
         let mut i = start_after;
         let max = read_next_project_id(&e);
@@ -158,8 +187,9 @@ impl MarketplaceContract {
         results
     }
 
-    // Donate to a project (native balance movements handled in app layer; this records metadata)
-    pub fn donate(e: Env, project_id: u128, donor: Address, amount: i128, timestamp: i128) -> u128 {
+    // MVP: Donate to a project (native balance movements handled in app layer; this records metadata)
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn donate(e: Env, project_id: u64, donor: Address, amount: i128, timestamp: i64) -> u64 {
         donor.require_auth();
         if amount <= 0 { panic_with_error!(&e, Error::InvalidArgument); }
         let mut project = Self::get_project(e.clone(), project_id);
@@ -179,14 +209,19 @@ impl MarketplaceContract {
         seq
     }
 
-    // Append an update; only owner
-    pub fn add_update(e: Env, project_id: u128, owner: Address, title: String, body: String, timestamp: i128) {
+    // MVP: Append an update; only owner
+    // Keep human-readable fields but enforce limits for cost control.
+    // TODO: For production, large bodies should move off-chain; keep references/hashes on-chain.
+    pub fn add_update(e: Env, project_id: u64, owner: Address, title: String, body: String, timestamp: i64) {
         owner.require_auth();
+        // String length limits to avoid bloat
+        if title.len() > 100 { panic_with_error!(&e, Error::StringTooLong); }
+        if body.len() > 1000 { panic_with_error!(&e, Error::StringTooLong); }
         let mut project = Self::get_project(e.clone(), project_id);
         if project.owner != owner { panic_with_error!(&e, Error::NotAuthorized); }
         let mut updates = project.updates.clone();
-        updates.push_back(Update { title: title.clone(), body, timestamp });
-        let idx = updates.len() - 1;
+        let idx: u32 = updates.len();
+        updates.set(idx, Update { title: title.clone(), body, timestamp });
         project.updates = updates;
         e.storage().persistent().set(&project_key(project_id), &project);
         // Emit event: UpdateAdded
@@ -196,8 +231,9 @@ impl MarketplaceContract {
         );
     }
 
-    // Mark milestone completed; only owner
-    pub fn complete_milestone(e: Env, project_id: u128, owner: Address, milestone_index: u32) {
+    // MVP: Mark milestone completed; only owner
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn complete_milestone(e: Env, project_id: u64, owner: Address, milestone_index: u32) {
         owner.require_auth();
         let mut project = Self::get_project(e.clone(), project_id);
         if project.owner != owner { panic_with_error!(&e, Error::NotAuthorized); }
@@ -209,46 +245,53 @@ impl MarketplaceContract {
         milestones.set(milestone_index, m);
         project.milestones = milestones;
         e.storage().persistent().set(&project_key(project_id), &project);
-        // Emit event: MilestoneCompleted
+        // Emit event: MilestoneCompleted (includes title for convenience; keep titles short)
         e.events().publish(
             (symbol_short!("v1"), symbol_short!("MsDone")),
             (project_id, milestone_index, project.milestones.get(milestone_index).unwrap().title.clone(), e.ledger().timestamp()),
         );
     }
 
-    // Reporting getters for dashboards
-    pub fn get_summary(e: Env, project_id: u128) -> (String, i128, i128, i128) {
+    // MVP: Reporting getters for dashboards
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn get_summary(e: Env, project_id: u64) -> (String, i128, i128, i128) {
         let p = Self::get_project(e, project_id);
         let percent_bp = if p.target_amount > 0 { (p.current_amount * 10_000) / p.target_amount } else { 0 };
         (p.name, p.current_amount, p.target_amount, percent_bp)
     }
 
-    pub fn get_location(e: Env, project_id: u128) -> Location {
+    pub fn get_location(e: Env, project_id: u64) -> Location {
         let p = Self::get_project(e, project_id);
         p.location
     }
 
-    pub fn get_impact_area(e: Env, project_id: u128) -> String {
+    pub fn get_impact_area(e: Env, project_id: u64) -> String {
         let p = Self::get_project(e, project_id);
         p.impact_area
     }
 
-    pub fn get_problem_statement(e: Env, project_id: u128) -> String {
+    pub fn get_problem_statement(e: Env, project_id: u64) -> String {
         let p = Self::get_project(e, project_id);
         p.problem_statement
     }
 
-    pub fn list_updates(e: Env, project_id: u128) -> Vec<Update> {
-        let p = Self::get_project(e, project_id);
-        p.updates
+    pub fn list_updates(e: Env, project_id: u64) -> Vec<Update> {
+        let p = Self::get_project(e.clone(), project_id);
+        let mut out = Vec::new(&e);
+        let len: u32 = p.updates.len();
+        for i in 0..len { out.push_back(p.updates.get(i).unwrap()); }
+        out
     }
 
-    pub fn list_milestones(e: Env, project_id: u128) -> Vec<Milestone> {
-        let p = Self::get_project(e, project_id);
-        p.milestones
+    pub fn list_milestones(e: Env, project_id: u64) -> Vec<Milestone> {
+        let p = Self::get_project(e.clone(), project_id);
+        let mut out = Vec::new(&e);
+        let len: u32 = p.milestones.len();
+        for i in 0..len { out.push_back(p.milestones.get(i).unwrap()); }
+        out
     }
 
-    pub fn list_donations(e: Env, project_id: u128, start_after_seq: u128, limit: u32) -> Vec<Donation> {
+    pub fn list_donations(e: Env, project_id: u64, start_after_seq: u64, limit: u32) -> Vec<Donation> {
         let mut results = Vec::new(&e);
         let mut seq = start_after_seq;
         let max_seq = read_project_don_seq(&e, project_id);
@@ -263,8 +306,9 @@ impl MarketplaceContract {
         results
     }
 
-    // Impact metrics
-    pub fn set_impacted_people(e: Env, project_id: u128, owner: Address, impacted_people: i128) {
+    // MVP: Impact metrics
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn set_impacted_people(e: Env, project_id: u64, owner: Address, impacted_people: i128) {
         owner.require_auth();
         let p = Self::get_project(e.clone(), project_id);
         if p.owner != owner { panic_with_error!(&e, Error::NotAuthorized); }
@@ -276,14 +320,19 @@ impl MarketplaceContract {
         );
     }
 
-    pub fn get_impacted_people(e: Env, project_id: u128) -> i128 {
+    // MVP: Get impacted people for a project
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn get_impacted_people(e: Env, project_id: u64) -> i128 {
         e.storage().persistent().get::<_, i128>(&impacted_key(project_id)).unwrap_or(0)
     }
 
+    // MVP: Get total impacted people across all projects where donor donated
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    // WARNING: This function iterates over ALL projects - expensive operation
     pub fn get_donor_impacted_people(e: Env, donor: Address) -> i128 {
         let max = read_next_project_id(&e);
         let mut sum: i128 = 0;
-        let mut pid: u128 = 0;
+        let mut pid: u64 = 0;
         while pid < max {
             pid += 1;
             if e.storage().persistent().get::<_, bool>(&donor_project_mark_key(donor.clone(), pid)).is_some() {
@@ -294,8 +343,9 @@ impl MarketplaceContract {
         sum
     }
 
-    // Aggregate stats for dashboards
-    pub fn get_dashboard_stats(e: Env, project_id: u128) -> Stats {
+    // MVP: Aggregate stats for dashboards
+    // TODO: Move to backend for production - this is for rapid MVP iteration
+    pub fn get_dashboard_stats(e: Env, project_id: u64) -> Stats {
         let p = Self::get_project(e.clone(), project_id);
         let donations_count = read_project_don_seq(&e, project_id);
         let milestones_total: u32 = p.milestones.len();
@@ -331,9 +381,24 @@ mod test {
         let contract_id = e.register_contract(None, MarketplaceContract);
         let client = MarketplaceContractClient::new(&e, &contract_id);
         let owner = Address::generate(&e);
-        let loc = Location { latitude: 0, longitude: 0, country: &"AR".into(), province: &"Buenos Aires".into(), city: &    "La Plata".into() };
-        let milestones = Vec::new(&e);
-        let id = client.create_project(&owner, &"Comedor".into(), &1_726_000_000i128, &30_000i128, &"Crear comedor".into(), &"Educacion".into(), &loc, &milestones);
+        let loc = Location { 
+            latitude: 0, 
+            longitude: 0, 
+            country: String::from_str(&e, "AR"), 
+            province: String::from_str(&e, "Buenos Aires"), 
+            city: String::from_str(&e, "La Plata") 
+        };
+        let milestones = Map::from_array(&e, &[]);
+        let id = client.create_project(
+            &owner, 
+            &String::from_str(&e, "Comedor"), 
+            &1_726_000_000i64, 
+            &30_000i128, 
+            &String::from_str(&e, "Crear comedor"), 
+            &String::from_str(&e, "Educacion"), 
+            &loc, 
+            &milestones
+        );
         let p = client.get_project(&id);
         assert_eq!(p.name, String::from_str(&e, "Comedor"));
     }
