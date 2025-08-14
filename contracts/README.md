@@ -1,70 +1,70 @@
-# Trace Soroban Contracts 
+# Trace Soroban Contracts
 
-Este directorio contiene el contrato Soroban del MVP de crowdfunding on-chain. Cómo instalar, compilar, desplegar y ejecutar funciones con la CLI (v23).
+This directory contains the Soroban contract for the on-chain crowdfunding MVP. Instructions for installing, compiling, deploying, and executing functions using the CLI (v23).
 
-Enlaces:
-- Setup oficial (Rust, target, CLI): https://developers.stellar.org/docs/build/smart-contracts/getting-started/setup
+Links:
+- Official setup (Rust, target, CLI): https://developers.stellar.org/docs/build/smart-contracts/getting-started/setup
 
-## 1) Variables de entorno (.env)
-Cambiar `.env.example` a `.env`
+## 1) Environment Variables (.env)
+Rename `.env.example` to `.env`
 
 ```
-# Red
+# Network
 STELLAR_NETWORK=testnet
 
-# Identidad/llaves
-STELLAR_ACCOUNT=trace-dev          # identidad local (recomendado)
-ADMIN_PUBLIC_KEY=GD...             # opcional: clave pública
-ADMIN_SECRET_KEY=SC...             # opcional: clave secreta
+# Identity / Keys
+STELLAR_ACCOUNT=trace-dev          # local identity (recommended)
+ADMIN_PUBLIC_KEY=GD...             # optional: public key
+ADMIN_SECRET_KEY=SC...             # optional: secret key
 
-# ID del contrato desplegado
+# Deployed contract ID
 CONTRACT_ID=CCG7MR5XZFYIOFVLPMQKTJULMQQNENKDUNHTMPUKPTDXWH2SRAGPN2MO
 ```
 
-Cargar en shell:
+Load in shell:
 
-```
+```bash
 cd contracts
 set -a; source .env; set +a
 ```
+### Notes:
 
-Notas:
-- La CLI entiende `STELLAR_NETWORK`, `STELLAR_ACCOUNT`, `STELLAR_CONTRACT_ID`.
-- Podés usar `--id "$CONTRACT_ID"` explícito si preferís.
+The CLI recognizes `STELLAR_NETWORK`, `STELLAR_ACCOUNT`, `STELLAR_CONTRACT_ID`.  
+You can use `--id "$CONTRACT_ID"` explicitly if you prefer.
 
-### Tipos y límites (MVP)
-- IDs y contadores: `u64`
-- Timestamps: `i64` (segundos Unix)
-- Montos: `i128` (mantiene precisión)
-- Geolocalización: `latitude/longitude: i32` en microgrados (ej: −34° → −34000000)
-- Límites de strings: `name ≤ 100`, `impact_area ≤ 50`, `problem_statement ≤ 500`, `update.title ≤ 100`, `update.body ≤ 1000`
-- Estructuras: `milestones` y `updates` se almacenan como `Map<u32, …>`; los listados (`list_milestones`, `list_updates`) devuelven `Vec<…>`.
+### Types and Limits (MVP)
+- IDs and counters: `u64`
+- Timestamps: `i64` (Unix seconds)
+- Amounts: `i128` (preserves precision)
+- Geolocation: `latitude/longitude: i32` in microdegrees (e.g., −34° → −34000000)
+- String limits: `name ≤ 100`, `impact_area ≤ 50`, `problem_statement ≤ 500`, `update.title ≤ 100`, `update.body ≤ 1000`
+- Structures: `milestones` and `updates` are stored as `Map<u32, …>`; listings (`list_milestones`, `list_updates`) return `Vec<…>`.
 
-## 2) Identidad en testnet (si no la tenés)
+## 2) Identity on Testnet (if you don’t have one)
 
 ```
 stellar keys generate --global trace-dev --network testnet --fund
 stellar keys address trace-dev   # muestra Address...
 ```
 
-## 3) Compilar
+## 3) Compile
 
 ```
 cd contracts/marketplace
 cargo build --target wasm32v1-none --release
 ```
 
-Artefacto: `contracts/target/wasm32v1-none/release/marketplace.wasm`
+Artifact: `contracts/target/wasm32v1-none/release/marketplace.wasm`
 
-## 4) Optimizar WASM (recomendado)
+## 4) Optimize WASM (recommended)
 
 ```
 stellar contract optimize --wasm ../target/wasm32v1-none/release/marketplace.wasm
 ```
 
-Esto reduce el tamaño del archivo significativamente (ej: de ~46KB a ~26KB) y es **requerido para producción**.
+This significantly reduces the file size (e.g., from ~46KB to ~26KB) and is **required for production**.
 
-## 5) Desplegar (opcional, si creás uno nuevo)
+## 5) Deploy (optional, if creating a new one)
 
 ```
 stellar contract deploy \
@@ -73,12 +73,12 @@ stellar contract deploy \
   --wasm /Users/user/oss-contributions/Trace/contracts/target/wasm32v1-none/release/marketplace.wasm
 ```
 
-## 6) Invocar funciones (CLI v23)
-Regla: después de `--` va el nombre de la función y luego flags con nombre.
+## 6) Invoke Functions (CLI v23)
+Rule: after `--` comes the function name, followed by named flags.
 
-Lecturas: `--send=no` (simula). Escrituras: firmar con `trace-dev` o `SC...`.
+Reads: `--send=no` (simulate). Writes: sign with `trace-dev` or `SC...`.
 
-### 6.1 Crear proyecto
+### 6.1 Create Project
 
 ```
 cat > /tmp/location.json << 'JSON'
@@ -101,7 +101,7 @@ Example output:
 "1"
 ```
 
-### 6.2 Listar / Detalle
+### 6.2 List / Details
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" --send=no -- list_projects --start_after 0 --limit 20
@@ -112,7 +112,7 @@ Example output (get_project):
 {"id":1,"owner":"GD...","name":"Comedor Escolar","deadline_ts":1726000000,"current_amount":"0","target_amount":"30000000","problem_statement":"Crear un comedor escolar","impact_area":"Educacion","location":{"latitude":-34000000,"longitude":-58000000,"country":"AR","province":"Buenos Aires","city":"La Plata"},"milestones":{},"updates":{}}
 ```
 
-### 6.3 Donación (metadatos)
+### 6.3 Donation (metadata)
 
 ```
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
@@ -145,7 +145,7 @@ Example output (list_updates):
 ### 6.5 Milestones
 
 ```
-# Completar índice 0 (solo si el proyecto tiene hitos)
+# Complete index 0 (only if the project has milestones)
 stellar contract invoke --id "$CONTRACT_ID" -n "$STELLAR_NETWORK" -s "$STELLAR_ACCOUNT" -- \
   complete_milestone --project_id 1 --owner $(stellar keys address trace-dev) --milestone_index 0
 
@@ -196,7 +196,7 @@ Example output (get_donor_impacted_people):
 "123"   # suma de impacted_people de todos los proyectos donde donó
 ```
 
-## 6.8 Basic events (English)
+### 6.8 Basic events 
 Emitted for indexers/dashboards:
 - PrjCreate(project_id:u64, owner, name, deadline_ts:i64, target_amount:i128, impact_area)
 - Donate(project_id:u64, seq:u64, donor, amount:i128, timestamp:i64, current_amount:i128)
@@ -204,14 +204,14 @@ Emitted for indexers/dashboards:
 - MsDone(project_id:u64, milestone_index:u32, title, ledger_timestamp:u64)
 - ImpSet(project_id, impacted_people)
 
-## 7) Errores comunes
+## 7) Common Errors
 - `Error(Contract, #1)` NotAuthorized: no sos el owner del proyecto.
 - `Error(Contract, #2)` ProjectNotFound: el `project_id` no existe.
 - `Error(Contract, #3)` InvalidArgument: índice de milestone inválido / datos faltantes / impacted_people negativo.
 - Escrituras con `--source` G...: no firma. Usar `trace-dev` o `SC...`.
 - JSON inline mal escapado: preferí `--<arg>-file-path`.
 
-## 8) Código
+## 8) Code
 - Workspace: `contracts/Cargo.toml`
 - Crate: `contracts/marketplace`
 - Main: `contracts/marketplace/src/lib.rs`
