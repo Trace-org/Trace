@@ -50,13 +50,6 @@ export function Header() {
               Proyectos
               <span className="absolute bottom-1 left-4 w-0 h-0.5 bg-gradient-to-r from-trace-forest to-trace-earth transition-all duration-300 group-hover:w-8"></span>
             </Link>
-            <Link
-              href="/como-funciona"
-              className="text-trace-earth font-semibold hover:text-trace-forest transition-all duration-300 relative group py-3 px-4 rounded-lg hover:bg-trace-forest/5"
-            >
-              Cómo funciona
-              <span className="absolute bottom-1 left-4 w-0 h-0.5 bg-gradient-to-r from-trace-forest to-trace-earth transition-all duration-300 group-hover:w-8"></span>
-            </Link>
             <Dialog>
               <DialogTrigger asChild>
                 <button className="text-trace-earth font-semibold hover:text-trace-forest transition-all duration-300 relative group py-3 px-4 rounded-lg hover:bg-trace-forest/5 flex items-center space-x-2">
@@ -103,13 +96,6 @@ export function Header() {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Proyectos
-            </Link>
-            <Link
-              href="/como-funciona"
-              className="block text-trace-earth font-semibold hover:text-trace-forest transition-colors py-2 px-4 rounded-lg hover:bg-trace-forest/5"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Cómo funciona
             </Link>
             <Dialog>
               <DialogTrigger asChild>
