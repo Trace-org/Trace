@@ -60,7 +60,7 @@ Once the frontend is running, you can:
 *   Click on a project to view its details, including milestones and updates.
 *   If you are a company, explore the dedicated dashboard to manage your donations and view impact reports.
 
-## 📸 Screenshots / Demo Video
+## 📸 Screenshots
 
 ![Project List](/frontend/public/screenshots/screenshot1.png)
 ![Project Details](/frontend/public/screenshots/screenshot2.jpg)
