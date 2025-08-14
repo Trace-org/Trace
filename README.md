@@ -1,4 +1,4 @@
-# Trace: Benevity for the People, Powered by Stellar
+# Trace: Next-Gen Social Impact Platform, Powered by Stellar
 
 ## 💡 Inspiration
 
