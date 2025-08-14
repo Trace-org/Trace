@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { UserDashboard } from "@/components/user-dashboard"
 import { CompanyDashboard } from "@/components/company-dashboard"
 import { Building2, User } from "lucide-react"
+import { mockCompanyStats } from "@/lib/mock-data"
 
 export default function ProfilePage() {
   const [dashboardType, setDashboardType] = useState<"user" | "company">("user")
@@ -20,7 +21,7 @@ export default function ProfilePage() {
               size="sm"
               onClick={() => setDashboardType("user")}
               className={`${
-                dashboardType === "user" ? "bg-trace-forest text-white" : "text-trace-earth hover:bg-trace-alabaster"
+                dashboardType === "user" ? "bg-trace-forest text-white hover:bg-white hover:text-black" : "text-trace-earth hover:bg-trace-alabaster"
               }`}
             >
               <User className="h-4 w-4 mr-2" />
@@ -31,7 +32,7 @@ export default function ProfilePage() {
               size="sm"
               onClick={() => setDashboardType("company")}
               className={`${
-                dashboardType === "company" ? "bg-trace-forest text-white" : "text-trace-earth hover:bg-trace-alabaster"
+                dashboardType === "company" ? "bg-trace-forest text-white hover:bg-white hover:text-black" : "text-trace-earth hover:bg-trace-alabaster"
               }`}
             >
               <Building2 className="h-4 w-4 mr-2" />
@@ -41,7 +42,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Dashboard Content */}
-        {dashboardType === "user" ? <UserDashboard /> : <CompanyDashboard />}
+        {dashboardType === "user" ? <UserDashboard /> : <CompanyDashboard stats={mockCompanyStats} />}
       </div>
     </div>
   )

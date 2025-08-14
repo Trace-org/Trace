@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Heart, MapPin, Calendar, TrendingUp } from "lucide-react"
+import Link from "next/link"
 
 interface UserStats {
   totalDonated: number
@@ -15,6 +16,7 @@ interface UserStats {
     amount: number
     date: string
     category: string
+    projectId: string
   }>
 }
 
@@ -31,6 +33,7 @@ const mockUserStats: UserStats = {
       amount: 5000,
       date: "2024-01-10",
       category: "Educación",
+      projectId: "1",
     },
     {
       id: "2",
@@ -38,6 +41,7 @@ const mockUserStats: UserStats = {
       amount: 3500,
       date: "2023-12-15",
       category: "Educación",
+      projectId: "2",
     },
     {
       id: "3",
@@ -45,6 +49,7 @@ const mockUserStats: UserStats = {
       amount: 7250,
       date: "2023-11-20",
       category: "Salud",
+      projectId: "3",
     },
   ],
 }
@@ -96,21 +101,23 @@ export function UserDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             {stats.donationHistory.slice(0, 3).map((donation) => (
-              <div key={donation.id} className="flex items-center justify-between p-3 bg-trace-alabaster/50 rounded-lg">
-                <div className="space-y-1">
-                  <div className="font-medium text-trace-earth text-sm">{donation.projectName}</div>
-                  <div className="flex items-center gap-2 text-xs text-trace-earth/60">
-                    <Calendar className="h-3 w-3" />
-                    {new Date(donation.date).toLocaleDateString("es-AR")}
+              <Link key={donation.id} href={`/proyecto/${donation.projectId}`}>
+                <div className="flex items-center justify-between p-3 bg-trace-alabaster/50 rounded-lg">
+                  <div className="space-y-1">
+                    <div className="font-medium text-trace-earth text-sm">{donation.projectName}</div>
+                    <div className="flex items-center gap-2 text-xs text-trace-earth/60">
+                      <Calendar className="h-3 w-3" />
+                      {new Date(donation.date).toLocaleDateString("es-AR")}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-semibold text-trace-forest">${donation.amount.toLocaleString()}</div>
+                    <Badge variant="outline" className="text-xs border-trace-cherry/30 text-trace-cherry">
+                      {donation.category}
+                    </Badge>
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-semibold text-trace-forest">${donation.amount.toLocaleString()}</div>
-                  <Badge variant="outline" className="text-xs border-trace-cherry/30 text-trace-cherry">
-                    {donation.category}
-                  </Badge>
-                </div>
-              </div>
+              </Link>
             ))}
           </CardContent>
         </Card>

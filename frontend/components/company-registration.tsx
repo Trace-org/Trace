@@ -77,8 +77,8 @@ export function CompanyRegistration({ DialogCloseButton }: { DialogCloseButton: 
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg mx-auto space-y-4">
-      <div className="bg-white rounded-lg shadow-lg p-4 relative">
+    <form onSubmit={handleSubmit} className="w-full max-w-full mx-auto space-y-4">
+      <div className="w-full bg-white rounded-lg shadow-lg p-4 relative">
         <div className="flex items-center space-x-3 pb-4">
           <div className="w-10 h-10 bg-trace-forest/10 rounded-lg flex items-center justify-center">
             <Building2 className="w-5 h-5 text-trace-forest" />

@@ -12,7 +12,7 @@ export function DonationHistory({ donations, projects }: DonationHistoryProps) {
   const getProjectById = (id: string) => projects.find((p) => p.id === id)
 
   return (
-    <Card>
+    <Card className="bg-white">
       <CardHeader>
         <CardTitle className="text-xl text-trace-earth">Historial de Donaciones</CardTitle>
         <p className="text-trace-earth/70">Todas tus contribuciones verificadas y trazables</p>
@@ -26,7 +26,7 @@ export function DonationHistory({ donations, projects }: DonationHistoryProps) {
             return (
               <div
                 key={donation.id}
-                className="flex items-center justify-between p-4 bg-trace-alabaster rounded-lg border border-trace-forest/10"
+                className="flex items-center justify-between p-4 bg-white rounded-lg border border-trace-forest/10"
               >
                 <div className="flex-1">
                   <h4 className="font-semibold text-trace-earth mb-1">{project.name}</h4>

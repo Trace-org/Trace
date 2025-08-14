@@ -19,10 +19,10 @@ const reports = [
     format: "PDF",
   },
   {
-    title: "Reporte Ejecutivo",
-    description: "Resumen ejecutivo para presentaciones corporativas",
+    title: "Reporte para Redes Sociales",
+    description: "Contenido optimizado para compartir en redes sociales",
     icon: Users,
-    format: "PDF + PPT",
+    format: "PDF + Imágenes",
   },
 ]
 
@@ -58,7 +58,7 @@ export function DownloadReports() {
   }
 
   return (
-    <Card>
+    <Card className="bg-white">
       <CardHeader>
         <CardTitle className="text-xl text-trace-earth">Reportes y Certificados</CardTitle>
         <p className="text-trace-earth/70">Documentación lista para stakeholders</p>
@@ -67,7 +67,7 @@ export function DownloadReports() {
         {reports.map((report, index) => (
           <div
             key={index}
-            className="flex items-start gap-3 p-3 bg-trace-alabaster rounded-lg border border-trace-forest/10"
+            className="flex items-start gap-3 p-3 bg-white rounded-lg border border-trace-forest/10"
           >
             <div className="p-2 bg-trace-forest/10 rounded-lg">
               <report.icon className="w-4 h-4 text-trace-forest" />
